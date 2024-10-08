@@ -1,0 +1,28 @@
+{{>common/header}}
+<div class="main">
+    <h2>TITLE update</h2>
+
+    {{#dto}}
+        <form action="/update" method="post">
+            <table width="80%">
+                <input type="hidden" name="id" value="{{id}}">
+                <tr>
+                    <td>id:</td><td>{{id}}</td>
+                </tr>
+                <tr>
+                    <td>name:</td><td><input type="text" value="{{name}}" name="name"></td>
+                </tr>
+                <tr>
+                    <td>password:</td><td><input type="text" value="{{password}}" name="password"></td>
+                </tr>
+                <tr>
+                    <td colspan="2"><a href="/selectAll">list all</a>
+
+                        <input type="submit" value="update"></td>
+                </tr>
+            </table>
+        </form>
+    {{/dto}}
+
+</div>
+{{>common/footer}}

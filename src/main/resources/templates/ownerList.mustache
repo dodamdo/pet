@@ -1,0 +1,27 @@
+{{>common/header}}
+<div class="main">
+    <h1>Owner List</h1>
+    <table>
+        <thead>
+        <tr>
+            <th>Owner ID</th>
+            <th>Shop ID</th>
+            <th>Main Owner Phone</th>
+            <th>Main Owner Name</th>
+            <th>Main Owner notes</th>
+        </tr>
+        </thead>
+        <tbody>
+        {{#ownerList}}
+            <tr>
+                <td>{{ownerId}}</td>
+                <td>{{mainOwnerPhone}}</td>
+                <td>{{mainOwnerName}}</td>
+                <td>{{mainOwnerNotes}}</td>
+
+            </tr>
+        {{/ownerList}}
+        </tbody>
+    </table>
+</div>
+{{>common/footer}}

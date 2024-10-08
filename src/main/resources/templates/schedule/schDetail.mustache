@@ -1,0 +1,50 @@
+
+{{>common/header}}
+<div class="main">
+
+    <h1>
+        <div>
+            <a href="schDetail?year={{previousYear}}&month={{previousMonth}}"> < </a> <!-- 이전 달 링크 -->
+
+              {{year}}년 {{month}}월 일정
+
+            <a href="schDetail?year={{nextYear}}&month={{nextMonth}}"> > </a> <!-- 다음 달 링크 -->
+        </div>
+
+    </h1>
+
+    <table>
+        <thead>
+        <tr>
+            <th>예약 ID</th>
+            <th>펫 ID</th>
+            <th>예약 날짜</th>
+            <th>예약 시간</th>
+            <th>예약 색상</th>
+            <th>그루밍 스타일</th>
+            <th>결제 방식</th>
+            <th>가격</th>
+            <th>예약 상태</th>
+            <th>메모</th>
+        </tr>
+        </thead>
+        <tbody>
+        {{#schList}}
+            <tr>
+                <td>{{schId}}</td>
+                <td>{{petId}}</td>
+                <td>{{schDate}}</td>
+                <td>{{schTime}}</td>
+                <td>{{schColor}}</td>
+                <td>{{groomingStyle}}</td>
+                <td>{{paymentMethod}}</td>
+                <td>{{groomingPrice}}</td>
+                <td>{{schState}}</td>
+                <td>{{schNotes}}</td>
+            </tr>
+        {{/schList}}
+        </tbody>
+    </table>
+</div>
+
+{{>common/footer}}
