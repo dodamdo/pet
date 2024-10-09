@@ -107,7 +107,13 @@
     </div>
 
     <div class="main">
-        <h1>전체 예약</h1>
+        <h1>
+            <div>
+                <a href="schMonth?year={{previousYear}}&month={{previousMonth}}"> < </a> <!-- 이전 달 링크 -->
+                {{year}}년 {{month}}월 일정
+                <a href="schMonth?year={{nextYear}}&month={{nextMonth}}"> > </a> <!-- 다음 달 링크 -->
+            </div>
+        </h1>
 
         <table>
             <thead>

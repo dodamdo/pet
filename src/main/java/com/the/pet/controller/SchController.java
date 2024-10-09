@@ -43,26 +43,25 @@ public class SchController {
 
     }
 
-    @GetMapping("/schedule/schDetail")
-    public String getSchedulesForNextMonth(
+    @GetMapping("/schedule/schMonth")
+    public String getschMonth(
             @RequestParam int year,
             @RequestParam int month,Model model) {
         LocalDate currentDate = LocalDate.of(year, month, 1);
 
-        int previousMonth=month-1;
-        int nextMonth=month+1;
+        int previousMonth =month-1;
+        int nextMonth =month+1;
         int previousYear=year;
-        int nextYear=year;
+        int nextYear =year;
         if(month ==12){
-            nextYear=year++;
+            nextYear=year+1;
             nextMonth=1;
         }else if (month == 1){
-            nextYear=year--;
-            nextMonth=12;
+            previousYear=year-1;
+            previousMonth=12;
         }
 
         List<SchEntity> schList = schService.getSchedulesForNextMonth(year, month);;
-
 
         model.addAttribute("schList",schList);
         model.addAttribute("year",year);
@@ -72,8 +71,12 @@ public class SchController {
         model.addAttribute("previousYear", previousYear);
         model.addAttribute("nextYear",nextYear);
         System.out.println(schList);
-        return "schedule/schDetail";
+        return "schedule/schMonth";
     }
+
+
+
+
 
 
 
