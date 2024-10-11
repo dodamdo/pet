@@ -30,32 +30,10 @@ public class OwnerEntity {
     @Column(name = "main_owner_notes", length = 255)
     private String mainOwnerNotes ; // 기본값 설정
 
-    @Column(name = "second_owner_phone", length = 100)
-    private String secondOwnerPhone;
 
-    @Column(name = "second_owner_name", length = 100)
-    private String secondOwnerName;
-
-    @Column(name = "second_owner_notes", length = 255)
-    private String secondOwnerNotes;
-
-    @Column(name = "third_owner_phone", length = 100)
-    private String thirdOwnerPhone;
-
-    @Column(name = "third_owner_name", length = 100)
-    private String thirdOwnerName;
-
-    @Column(name = "third_owner_notes", length = 255)
-    private String thirdOwnerNotes;
 
 
     public String getMainOwnerNotes() {
         return mainOwnerNotes != null ? mainOwnerNotes : "없음";
-    }
-    public String getSecondOwnerNotes() {
-        return secondOwnerNotes != null ? secondOwnerNotes : "없음";
-    }
-    public String getThirdOwnerNotes() {
-        return thirdOwnerNotes != null ? thirdOwnerNotes : "없음";
     }
 }

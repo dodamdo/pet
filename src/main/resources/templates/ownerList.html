@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <title>Owner List</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}" />
+    <th:replace="common/header :: header"></th:replace>
+</head>
+<body>
+<div th:replace="common/header :: header"></div>
+<div class="main">
+    <h1>Owner List</h1>
+    <table>
+        <thead>
+        <tr>
+            <th>Owner ID</th>
+            <th>Shop ID</th>
+            <th>Main Owner Phone</th>
+            <th>Main Owner Name</th>
+            <th>Main Owner Notes</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="owner : ${ownerList}">
+            <td th:text="${owner.ownerId}"></td>
+            <td th:text="${owner.shopId}"></td>
+            <td th:text="${owner.mainOwnerPhone}"></td>
+            <td th:text="${owner.mainOwnerName}"></td>
+            <td th:text="${owner.mainOwnerNotes}"></td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+<!-- Common footer replacement -->
+<th:replace="common/footer :: footer"></th:replace>
+</body>
+</html>

@@ -10,6 +10,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,7 +31,9 @@ public class OwnerController {
     }
 
     @GetMapping("/calender")
-    public String calender(){
+    public String calender(Model model){
+        model.addAttribute("currentYear", LocalDate.now().getYear());
+        model.addAttribute("currentMonth", LocalDate.now().getMonthValue() - 1);
         return "calendar";
     }
 }
