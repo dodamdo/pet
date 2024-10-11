@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import java.time.LocalDate;
 import java.time.YearMonth;
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -74,6 +75,13 @@ public class SchController {
         return "schedule/schMonth";
     }
 
+    @GetMapping("/check_sch")
+    public List<SchEntity> checkSchedule(@RequestParam String date) {
+        LocalDate schDate = LocalDate.parse(date); // 문자열을 LocalDate로 변환
+        System.out.println(date);
+        System.out.println(schRepository.findBySchDateOrderBySchTimeAsc(schDate));
+        return schRepository.findBySchDateOrderBySchTimeAsc(schDate); // 일정 리스트 반환
+    }
 
 
 

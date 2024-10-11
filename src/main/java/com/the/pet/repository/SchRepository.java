@@ -18,5 +18,6 @@ public interface SchRepository extends JpaRepository<SchEntity,Integer>{
     @Query("SELECT s FROM SchEntity s WHERE s.schDate >= :startDate AND s.schDate < :nextMonthStart")
     List<SchEntity> findSchedulesBetween(@Param("startDate") LocalDate startDate, @Param("nextMonthStart") LocalDate nextMonthStart);
 
+    List<SchEntity> findBySchDateOrderBySchTimeAsc(LocalDate schDate);
 
 }
