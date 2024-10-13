@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <title>Owner List</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+</head>
+<body>
+<div th:replace="common/header :: header"></div>
+<div class="main">
+    <form id="calculateForm" method="get"> <!-- ID 추가 -->
+        <label for="startDate">시작 날짜:</label>
+        <input type="date" id="startDate" name="startDate" required />
+
+        <label for="endDate">종료 날짜:</label>
+        <input type="date" id="endDate" name="endDate" required />
+
+        <button type="submit">계산하기</button>
+    </form>
+
+    <div id="result">
+        <table>
+            <tr>
+                <th>결제 방법</th>
+                <th>금액</th>
+            </tr>
+            <tr>
+                <td>카드</td>
+                <td id="card_total"></td>
+            </tr>
+            <tr>
+                <td>현금</td>
+                <td id="cash_total"></td>
+            </tr>
+            <tr>
+                <td>계좌이체</td>
+                <td id="account_total"></td>
+            </tr>
+            <tr>
+                <th>총액</th>
+                <th id="total_amount"></th>
+            </tr>
+        </table>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function() {
+        $('#calculateForm').on('submit', function(event) {
+            event.preventDefault(); // 기본 제출 방지
+            const startDate = $('#startDate').val();
+            const endDate = $('#endDate').val();
+
+            // 날짜 순서 확인
+            if (new Date(startDate) > new Date(endDate)) {
+                alert('시작 날짜는 종료 날짜보다 이전이어야 합니다.');
+                return;
+            }
+
+            $.ajax({
+                url: '/calculate',
+                type: 'GET',
+                data: { startDate: startDate, endDate: endDate },
+                success: function(data) {
+                    $('#card_total').text(data.card_total);
+                    $('#cash_total').text(data.cash_total);
+                    $('#account_total').text(data.account_total);
+                    $('#total_amount').text(data.total_amount);
+                },
+                error: function() {
+                    alert('금액을 계산하는데 오류가 발생했습니다.');
+                }
+            });
+        });
+    });
+</script>
+</body>
+</html>

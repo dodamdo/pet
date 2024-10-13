@@ -44,5 +44,6 @@ public class PetEntity {
     public String getPetNotes() {
         return petNotes != null ? petNotes : "없음";
     }
-
+    @Transient
+    private String formattedOwnerId;
 }

@@ -1,35 +1,35 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>펫 리스트</title>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" th:href="@{/css/style.css}" />
+    <title>펫 리스트</title>
     <style>
         body {
             font-family: Arial, sans-serif;
             margin: 0;
-            background-color: #f9f9f9; /* 부드러운 배경색 */
+            background-color: #f9f9f9;
         }
 
         h1 {
-            color: #333; /* 제목 색상 */
+            color: #333; /
             margin-bottom: 20px;
         }
 
         .search-container {
             display: flex;
             justify-content: flex-end; /* 오른쪽 정렬 */
-            margin-bottom: 20px; /* 테이블과의 간격 */
+            margin-bottom: 20px;
         }
 
         input[type="text"] {
             padding: 10px;
             border: 1px solid #ccc;
             border-radius: 4px;
-            width: 250px; /* 입력창 너비 */
+            width: 250px;
             font-size: 16px;
-            margin-right: 10px; /* 버튼과의 간격 */
+            margin-right: 10px;
         }
 
         button {
@@ -99,12 +99,11 @@
 <body>
 
 <div th:replace="common/header :: header"></div>
-
 <div class="main">
     <h1>펫 리스트</h1>
     <div class="search-container">
-        <form th:action="@{/petSearch}" method="get">
-            <input type="text" name="search" th:value="${search}" placeholder="반려동물 검색..." required />
+        <form th:action="@{/pets/petSearch}" method="get">
+            <input type="text" name="search" placeholder="반려동물 검색..." required />
             <button type="submit">검색</button>
         </form>
     </div>
@@ -112,22 +111,22 @@
         <thead>
         <tr>
             <th>이름</th>
+            <th>주인번호</th>
             <th>품종</th>
             <th>성별</th>
             <th>나이</th>
             <th>체중</th>
-            <th>소유자 ID</th>
             <th>메모</th>
         </tr>
         </thead>
         <tbody>
         <tr th:each="pet : ${pets}">
             <td th:text="${pet.petName}"></td>
+            <td th:text="${pet.formattedOwnerId}"></td>
             <td th:text="${pet.petBreed}"></td>
             <td th:text="${pet.petGender}"></td>
             <td th:text="${pet.petAge}"></td>
             <td th:text="${pet.petWeight}"></td>
-            <td th:text="${pet.ownerId}"></td>
             <td th:text="${pet.petNotes}"></td>
         </tr>
         </tbody>
@@ -135,15 +134,13 @@
 
     <div class="pagination" style="text-align: center; margin-top: 20px;">
         <div th:if="${prevPage >= 0}" style="display: inline;">
-            <a th:href="@{?/page=0&size=10(search=${search})}" style="margin: 0 5px;">≪</a>
-            <a th:href="@{?/size=10(page=${prevPage},search=${search})}" style="margin: 0 5px;"><</a>
+            <a th:href="@{/pets/petList(page=0, size=10)}" style="margin: 0 5px;">≪</a>
+            <a th:href="@{/pets/petList(page=${prevPage}, size=10)}" style="margin: 0 5px;"><</a>
         </div>
-
         <span style="margin: 0 10px;">Page <span th:text="${currentPage}"></span> of <span th:text="${totalPages}"></span></span>
-
         <div th:if="${nextPage}" style="display: inline;">
-            <a th:href="@{?/size=10(page=${nextPage},search=${search})}" style="margin: 0 5px;">></a>
-            <a th:href="@{?/size=10(page=${lastPage},search=${search})}" style="margin: 0 5px;">≫</a>
+            <a th:href="@{/pets/petList(page=${nextPage}, size=10)}" style="margin: 0 5px;">></a>
+            <a th:href="@{/pets/petList(page=${lastPage}, size=10)}" style="margin: 0 5px;">≫</a>
         </div>
     </div>
 

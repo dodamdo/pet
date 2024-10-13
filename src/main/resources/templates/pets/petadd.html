@@ -68,6 +68,9 @@
         <label for="petName">이름:</label>
         <input type="text" id="petName" name="petName" th:field="*{petName}" required>
 
+        <label for="ownerId">주인 번호 8자리 XXXXXXXX :</label>
+        <input type="number" id="ownerId" name="ownerId" th:field="*{ownerId}">
+
         <label for="petBreed">품종:</label>
         <input type="text" id="petBreed" name="petBreed" th:field="*{petBreed}">
 
@@ -80,8 +83,7 @@
         <label for="petWeight">체중:</label>
         <input type="text" id="petWeight" name="petWeight" th:field="*{petWeight}">
 
-        <label for="ownerId">주인 번호:</label>
-        <input type="number" id="ownerId" name="ownerId" th:field="*{ownerId}">
+
 
         <input type="hidden" id="shopId" name="shopId" value="1" th:field="*{shopId}">
 

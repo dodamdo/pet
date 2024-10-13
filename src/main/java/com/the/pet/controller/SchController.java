@@ -17,15 +17,14 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.time.YearMonth;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @Slf4j
@@ -35,10 +34,23 @@ public class SchController {
 
     @Autowired
     private SchRepository schRepository;
+    @Autowired
+    private PetRepository petRepository;
 
     @GetMapping("/schedule/schList")
     public String schlist(Model model){
         List<SchEntity> schList = schService.getAllSch();
+        for (SchEntity sch : schList) {
+            String petName=petRepository.findPetNameById(sch.getPetId());
+            String ownerId=petRepository.findOwnerIdById(sch.getPetId());
+            if (ownerId.length() == 8) {
+                ownerId= "010-" + ownerId.substring(0, 4) + "-" + ownerId.substring(4);
+            }
+            sch.setPetName(petName);
+            sch.setOwnerId(ownerId);
+        }
+
+
         model.addAttribute("schList",schList);
         return "schedule/schList";
 
@@ -63,6 +75,15 @@ public class SchController {
         }
 
         List<SchEntity> schList = schService.getSchedulesForNextMonth(year, month);;
+        for (SchEntity sch : schList) {
+            String petName=petRepository.findPetNameById(sch.getPetId());
+            String ownerId=petRepository.findOwnerIdById(sch.getPetId());
+            if (ownerId.length() == 8) {
+                ownerId= "010-" + ownerId.substring(0, 4) + "-" + ownerId.substring(4);
+            }
+            sch.setPetName(petName);
+            sch.setOwnerId(ownerId);
+        }
 
         model.addAttribute("schList",schList);
         model.addAttribute("year",year);
@@ -72,20 +93,81 @@ public class SchController {
         model.addAttribute("previousYear", previousYear);
         model.addAttribute("nextYear",nextYear);
         System.out.println(schList);
+
+        model.addAttribute("card_total", schService.getTotalPriceForCardPayments("카드", year, month));
+        model.addAttribute("cash_total", schService.getTotalPriceForCardPayments("현금", year, month));
+        model.addAttribute("account_total", schService.getTotalPriceForCardPayments("계좌이체", year, month));
+
         return "schedule/schMonth";
     }
 
+
+    @GetMapping("/calendar")
+    public String calender(Model model){
+        model.addAttribute("currentYear", LocalDate.now().getYear());
+        model.addAttribute("currentMonth", LocalDate.now().getMonthValue() - 1);
+        return "calendar";
+    }
+
+
     @GetMapping("/check_sch")
+    @ResponseBody
     public List<SchEntity> checkSchedule(@RequestParam String date) {
-        LocalDate schDate = LocalDate.parse(date); // 문자열을 LocalDate로 변환
+        LocalDate schDate = LocalDate.parse(date);
+
+
         System.out.println(date);
         System.out.println(schRepository.findBySchDateOrderBySchTimeAsc(schDate));
-        return schRepository.findBySchDateOrderBySchTimeAsc(schDate); // 일정 리스트 반환
+        List<SchEntity> schList =schRepository.findBySchDateOrderBySchTimeAsc(schDate);
+        for (SchEntity sch : schList) {
+            String petName=petRepository.findPetNameById(sch.getPetId());
+            String ownerId=petRepository.findOwnerIdById(sch.getPetId());
+            if (ownerId.length() == 8) {
+                ownerId= "010-" + ownerId.substring(0, 4) + "-" + ownerId.substring(4);
+            }
+            sch.setPetName(petName);
+            sch.setOwnerId(ownerId);
+        }
+
+
+        return schList; // 일정 리스트 반환
     }
 
 
 
 
+
+    @PostMapping("/calendar")
+    public SchEntity addSchedule(@ModelAttribute  SchEntity schentity) {
+        return schRepository.save(schentity);
+    }
+
+
+
+
+
+    @GetMapping("/outcome")
+    public String outcome(){
+        return "outcome";
+    }
+    @GetMapping("/calculate")
+    @ResponseBody
+    public Map<String, Integer> calculate(
+            @RequestParam("startDate") String startDateStr,
+            @RequestParam("endDate") String endDateStr){
+        LocalDate startDate = LocalDate.parse(startDateStr);
+        LocalDate endDate = LocalDate.parse(endDateStr);
+        int cardTotal = schService.getTotalOutcomeForCardPayments("카드", startDate, endDate);
+        int cashTotal = schService.getTotalOutcomeForCardPayments("현금", startDate, endDate);
+        int accountTotal = schService.getTotalOutcomeForCardPayments("계좌이체", startDate, endDate);
+        Map<String, Integer> result = new HashMap<>();
+        result.put("card_total", cardTotal);
+        result.put("cash_total", cashTotal);
+        result.put("account_total", accountTotal);
+        result.put("total_amount", cardTotal + cashTotal + accountTotal);
+
+        return result;
+    }
 
 
 }

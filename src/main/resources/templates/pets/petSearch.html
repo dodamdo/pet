@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" th:href="@{/css/style.css}" />
     <title>펫 리스트</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" th:href="@{/css/style.css}" />
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -99,38 +99,35 @@
 <body>
 
 <div th:replace="common/header :: header"></div>
+
 <div class="main">
     <h1>펫 리스트</h1>
     <div class="search-container">
-        <form th:action="@{/petSearch}" method="get">
-            <input type="text" name="search" placeholder="반려동물 검색..." required />
+        <form th:action="@{/pets/petSearch}" method="get">
+            <input type="text" name="search" th:value="${search}" placeholder="반려동물 검색..." required />
             <button type="submit">검색</button>
         </form>
     </div>
     <table>
         <thead>
         <tr>
-            <th>ID</th>
             <th>이름</th>
             <th>품종</th>
             <th>성별</th>
             <th>나이</th>
             <th>체중</th>
             <th>소유자 ID</th>
-            <th>가게 ID</th>
             <th>메모</th>
         </tr>
         </thead>
         <tbody>
         <tr th:each="pet : ${pets}">
-            <td th:text="${pet.petId}"></td>
             <td th:text="${pet.petName}"></td>
             <td th:text="${pet.petBreed}"></td>
             <td th:text="${pet.petGender}"></td>
             <td th:text="${pet.petAge}"></td>
             <td th:text="${pet.petWeight}"></td>
             <td th:text="${pet.ownerId}"></td>
-            <td th:text="${pet.shopId}"></td>
             <td th:text="${pet.petNotes}"></td>
         </tr>
         </tbody>
@@ -138,13 +135,15 @@
 
     <div class="pagination" style="text-align: center; margin-top: 20px;">
         <div th:if="${prevPage >= 0}" style="display: inline;">
-            <a th:href="@{/petList(page=0, size=10)}" style="margin: 0 5px;">≪</a>
-            <a th:href="@{/petList(page=${prevPage}, size=10)}" style="margin: 0 5px;"><</a>
+            <a th:href="@{?/page=0&size=10(search=${search})}" style="margin: 0 5px;">≪</a>
+            <a th:href="@{?/size=10(page=${prevPage},search=${search})}" style="margin: 0 5px;"><</a>
         </div>
+
         <span style="margin: 0 10px;">Page <span th:text="${currentPage}"></span> of <span th:text="${totalPages}"></span></span>
+
         <div th:if="${nextPage}" style="display: inline;">
-            <a th:href="@{/petList(page=${nextPage}, size=10)}" style="margin: 0 5px;">></a>
-            <a th:href="@{/petList(page=${lastPage}, size=10)}" style="margin: 0 5px;">≫</a>
+            <a th:href="@{?/size=10(page=${nextPage},search=${search})}" style="margin: 0 5px;">></a>
+            <a th:href="@{?/size=10(page=${lastPage},search=${search})}" style="margin: 0 5px;">≫</a>
         </div>
     </div>
 

@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <title>Pet Detail</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}" />
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9;
+            color: #333;
+            margin: 0;
+        }
+
+        .main {
+            max-width: 800px;
+            margin: auto;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            color: #4CAF50;
+            text-align: center;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+
+        table.pet-detail,
+        table.schedule {
+            border: 1px solid #ddd;
+        }
+
+        table th, table td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+
+        table th {
+            background-color: #4CAF50;
+            color: white;
+            font-weight: bold;
+        }
+
+        table tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        table tr:hover {
+            background-color: #ddd;
+        }
+
+        td {
+            vertical-align: top;
+        }
+
+
+
+    </style>
+</head>
+<body>
+<div th:replace="common/header :: header"></div>
+<div class="main">
+    <h1 th:text="${pet.petName} + '의 세부 정보'"></h1>
+    <table class="pet-detail">
+        <tr>
+            <td>품종</td>
+            <td th:text="${pet.petBreed}">품종</td>
+        </tr>
+        <tr>
+            <td>성별</td>
+            <td th:text="${pet.petGender}">성별</td>
+        </tr>
+        <tr>
+            <td>나이</td>
+            <td th:text="${pet.petAge}">나이</td>
+        </tr>
+        <tr>
+            <td>무게</td>
+            <td th:text="${pet.petWeight}">무게</td>
+        </tr>
+        <tr>
+            <td>주인 번호</td>
+            <td th:text="${pet.formattedOwnerId}"></td>
+        </tr>
+        <tr>
+            <td>메모</td>
+            <td th:text="${pet.petNotes}">메모</td>
+        </tr>
+    </table>
+
+    <h1>전체 예약</h1>
+
+    <table class="schedule">
+        <thead>
+        <tr>
+            <th>예약 날짜</th>
+            <th>예약 시간</th>
+            <th>그루밍 스타일</th>
+            <th>결제 방식</th>
+            <th>가격</th>
+            <th>예약 상태</th>
+            <th>메모</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="sch : ${petsch}">
+            <td th:text="${sch.schDate}"></td>
+            <td th:text="${sch.schTime}"></td>
+            <td th:text="${sch.groomingStyle}"></td>
+            <td th:text="${sch.paymentMethod}"></td>
+            <td th:text="${sch.groomingPrice}"></td>
+            <td th:text="${sch.schState}"></td>
+            <td th:text="${sch.schNotes}"></td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>

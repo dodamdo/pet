@@ -119,11 +119,10 @@
         <table>
             <thead>
             <tr>
-                <th>예약 ID</th>
-                <th>펫 ID</th>
+                <th>펫 이름</th>
+                <th>주인 번호</th>
                 <th>예약 날짜</th>
                 <th>예약 시간</th>
-                <th>예약 색상</th>
                 <th>그루밍 스타일</th>
                 <th>결제 방식</th>
                 <th>가격</th>
@@ -133,11 +132,10 @@
             </thead>
             <tbody>
             <tr th:each="sch : ${schList}">
-                <td th:text="${sch.schId}"></td>
-                <td th:text="${sch.petId}"></td>
+                <td th:text="${sch.petName}"></td>
+                <td th:text="${sch.ownerId}"></td>
                 <td th:text="${sch.schDate}"></td>
                 <td th:text="${sch.schTime}"></td>
-                <td th:text="${sch.schColor}"></td>
                 <td th:text="${sch.groomingStyle}"></td>
                 <td th:text="${sch.paymentMethod}"></td>
                 <td th:text="${sch.groomingPrice}"></td>

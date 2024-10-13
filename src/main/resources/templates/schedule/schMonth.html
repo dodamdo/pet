@@ -125,11 +125,10 @@
         <table>
             <thead>
             <tr>
-                <th>예약 ID</th>
-                <th>펫 ID</th>
                 <th>예약 날짜</th>
                 <th>예약 시간</th>
-                <th>예약 색상</th>
+                <th>이름</th>
+                <th>주인번호</th>
                 <th>그루밍 스타일</th>
                 <th>결제 방식</th>
                 <th>가격</th>
@@ -139,11 +138,10 @@
             </thead>
             <tbody>
             <tr th:each="sch : ${schList}">
-                <td th:text="${sch.schId}"></td>
-                <td th:text="${sch.petId}"></td>
                 <td th:text="${sch.schDate}"></td>
                 <td th:text="${sch.schTime}"></td>
-                <td th:text="${sch.schColor}"></td>
+                <td th:text="${sch.petName}"></td>
+                <td th:text="${sch.ownerId}"></td>
                 <td th:text="${sch.groomingStyle}"></td>
                 <td th:text="${sch.paymentMethod}"></td>
                 <td th:text="${sch.groomingPrice}"></td>
@@ -151,6 +149,29 @@
                 <td th:text="${sch.schNotes}"></td>
             </tr>
             </tbody>
+        </table>
+        <table>
+            <tr>
+                <th>결제방법</th>
+                <th>금액</th>
+            </tr>
+            <tr>
+                <td>카드</td>
+                <td th:text="${card_total}"></td>
+            </tr>
+            <tr>
+                <td>현금</td>
+                <td th:text="${cash_total}"></td>
+            </tr>
+            <tr>
+                <td>계좌이체</td>
+                <td th:text="${account_total}"></td>
+            </tr>
+            <tr>
+                <th>총액</th>
+                <th th:text="${card_total+cash_total+account_total}"></th>
+            </tr>
+
         </table>
     </div>
 </div>

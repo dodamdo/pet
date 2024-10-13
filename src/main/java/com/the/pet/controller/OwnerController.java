@@ -2,7 +2,6 @@ package com.the.pet.controller;
 
 
 import com.the.pet.model.entity.OwnerEntity;
-import com.the.pet.model.request.OwnerDto;
 import com.the.pet.service.OwnerService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +10,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -22,18 +20,13 @@ public class OwnerController {
     private OwnerService ownerService;
 
 
-    @GetMapping("/ownerList")
+    @GetMapping("/owners/ownerList")
     public String listOwners(Model model) {
         List<OwnerEntity> ownerList = ownerService.getAllOwners();
         System.out.println(ownerList);
         model.addAttribute("ownerList", ownerList);
-        return "ownerList";
+        return "/owners/ownerList";
     }
 
-    @GetMapping("/calender")
-    public String calender(Model model){
-        model.addAttribute("currentYear", LocalDate.now().getYear());
-        model.addAttribute("currentMonth", LocalDate.now().getMonthValue() - 1);
-        return "calendar";
-    }
+
 }

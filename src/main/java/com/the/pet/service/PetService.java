@@ -19,4 +19,8 @@ public class PetService {
     public void savePet(PetEntity pet) {
         petRepository.save(pet);
     }
+
+    public PetEntity getPetById(Integer petId) {
+        return petRepository.findById(petId).orElse(null);
+    }
 }

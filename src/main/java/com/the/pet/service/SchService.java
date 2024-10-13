@@ -29,9 +29,23 @@ public class SchService {
 
 
     public List<SchEntity> getSchedulesForNextMonth(int year, int month) {
-        LocalDate startDate = LocalDate.of(year, month, 1); // 지정한 달의 첫날
-        LocalDate nextMonthStart = startDate.plusMonths(1); // 다음 달의 첫날
+        LocalDate startDate = LocalDate.of(year, month, 1);
+        LocalDate nextMonthStart = startDate.plusMonths(1);
         return schRepository.findSchedulesBetween(startDate, nextMonthStart);
     }
+
+    public int getTotalPriceForCardPayments(String paymentMethod,int year, int month) {
+        LocalDate startDate = LocalDate.of(year, month, 1);
+        LocalDate nextMonthStart = startDate.plusMonths(1);
+        Integer totalPrice = schRepository.findTotalPriceByPaymentMethod(paymentMethod, startDate, nextMonthStart);
+        return (totalPrice != null) ? totalPrice : 0;
+    }
+
+    public int getTotalOutcomeForCardPayments(String paymentMethod,LocalDate startDate,LocalDate endDate){
+        Integer totalPrice = schRepository.TotalPriceByPaymentMethod(paymentMethod, startDate, endDate);
+        return (totalPrice != null) ? totalPrice : 0;
+    }
+
+
 
 }

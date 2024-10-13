@@ -1,7 +1,9 @@
 package com.the.pet.controller;
 
 import com.the.pet.model.entity.PetEntity;
+import com.the.pet.model.entity.SchEntity;
 import com.the.pet.repository.PetRepository;
+import com.the.pet.repository.SchRepository;
 import com.the.pet.service.PetService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,11 +29,21 @@ public class PetController {
 
     @Autowired
     private PetRepository petRepository;
+    @Autowired
+    private SchRepository schRepository;
 
-    @GetMapping("/petList")
+    @GetMapping("/pets/petList")
     public String getAllPets( Model model,@PageableDefault(size = 10) Pageable pageable) {
         pageable =PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), Sort.by("petId").descending());
         Page<PetEntity>  pets = petRepository.findAll(pageable);
+        for(PetEntity pet : pets){
+            if(pet.getOwnerId().toString().length()==8){
+                String formattedOwnerId = "010-" + pet.getOwnerId().toString().substring(0, 4) + "-" + pet.getOwnerId().toString().substring(4);
+                pet.setFormattedOwnerId(formattedOwnerId);
+            }
+        }
+
+
         model.addAttribute("pets", pets);
         model.addAttribute("currentPage",pets.getNumber()+1);
         model.addAttribute("totalPages",pets.getTotalPages());
@@ -39,10 +51,10 @@ public class PetController {
         model.addAttribute("nextPage", pets.hasNext() ? pets.getNumber() + 1 : null);
         model.addAttribute("lastPage",pets.getTotalPages()-1);
 
-        return "petList";
+        return "pets/petList";
     }
 
-    @GetMapping("/petSearch")
+    @GetMapping("/pets/petSearch")
     public String getpetSearch(@RequestParam(value = "search") String search,
                              Model model,@PageableDefault(size = 10) Pageable pageable) {
 
@@ -57,7 +69,7 @@ public class PetController {
         model.addAttribute("lastPage",pets.getTotalPages()-1);
         model.addAttribute("search", search);
 
-        return "petSearch";
+        return "pets/petSearch";
     }
 
     @GetMapping("/pets/petadd")
@@ -69,6 +81,30 @@ public class PetController {
     @PostMapping("/pets/petadd")
     public String petaddpost(@ModelAttribute PetEntity pet) {
         petService.savePet(pet);
-        return "redirect:/petList";
+        return "redirect:/pets/petList";
+    }
+
+
+    @GetMapping("/pets/petDetail")
+    public String petDetail(@RequestParam("petId") Integer petId, Model model) {
+        PetEntity pet = petService.getPetById(petId);
+        if(pet.getOwnerId().toString().length()==8){
+            String formattedOwnerId = "010-" + pet.getOwnerId().toString().substring(0, 4) + "-" + pet.getOwnerId().toString().substring(4);
+            pet.setFormattedOwnerId(formattedOwnerId);
+        }
+        model.addAttribute("pet", pet);
+        List<SchEntity> schList = schRepository.findByPetIdOrderBySchDateAsc(petId);
+        for (SchEntity sch : schList) {
+            String petName=petRepository.findPetNameById(sch.getPetId());
+            String ownerId=petRepository.findOwnerIdById(sch.getPetId());
+            if (ownerId.length() == 8) {
+                ownerId= "010-" + ownerId.substring(0, 4) + "-" + ownerId.substring(4);
+            }
+            sch.setPetName(petName);
+            sch.setOwnerId(ownerId);
+        }
+        model.addAttribute("petsch",schList);
+
+        return "pets/petDetail";
     }
 }
