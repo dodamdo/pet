@@ -58,7 +58,21 @@
         td {
             vertical-align: top;
         }
+        .update-button {
+        display: inline-block;
+        padding: 10px 15px;
+        border: none;
+        border-radius: 4px;
+        background-color: #4CAF50;
+        color: white;
+        text-decoration: none;
+        font-size: 16px;
+        transition: background-color 0.3s;
+    }
 
+    .update-button:hover {
+        background-color: #0056b3;
+    }
 
 
     </style>
@@ -67,6 +81,7 @@
 <div th:replace="common/header :: header"></div>
 <div class="main">
     <h1 th:text="${pet.petName} + '의 세부 정보'"></h1>
+    <a th:href="@{/pets/petUpdate(petId=${pet.petId})}" class="update-button">정보수정</a>
     <table class="pet-detail">
         <tr>
             <td>품종</td>

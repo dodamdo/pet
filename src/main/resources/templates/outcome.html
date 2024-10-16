@@ -4,18 +4,93 @@
     <title>Owner List</title>
     <link rel="stylesheet" th:href="@{/css/style.css}" />
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <style>
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+
+        .main {
+            max-width: 800px;
+            margin: 50px auto;
+            background-color: #ffffff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+        }
+
+        form {
+            display: flex;
+            justify-content: space-between;
+            gap: 15px;
+            margin-bottom: 20px;
+            align-items: center;
+        }
+
+        input[type="date"] {
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            width: calc(50% - 10px);
+        }
+
+        button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: center;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        #result {
+            margin-top: 30px;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        tr:hover {
+            background-color: #f1f1f1;
+        }
+    </style>
 </head>
 <body>
 <div th:replace="common/header :: header"></div>
 <div class="main">
-    <form id="calculateForm" method="get"> <!-- ID 추가 -->
+    <form id="calculateForm" method="get">
         <label for="startDate">시작 날짜:</label>
         <input type="date" id="startDate" name="startDate" required />
 
         <label for="endDate">종료 날짜:</label>
         <input type="date" id="endDate" name="endDate" required />
 
-        <button type="submit">계산하기</button>
+        <button type="submit">계산</button>
     </form>
 
     <div id="result">
@@ -47,11 +122,10 @@
 <script>
     $(document).ready(function() {
         $('#calculateForm').on('submit', function(event) {
-            event.preventDefault(); // 기본 제출 방지
+            event.preventDefault();
             const startDate = $('#startDate').val();
             const endDate = $('#endDate').val();
 
-            // 날짜 순서 확인
             if (new Date(startDate) > new Date(endDate)) {
                 alert('시작 날짜는 종료 날짜보다 이전이어야 합니다.');
                 return;

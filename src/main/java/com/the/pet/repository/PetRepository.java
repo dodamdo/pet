@@ -10,8 +10,10 @@ import org.springframework.data.repository.query.Param;
 
 public interface PetRepository extends JpaRepository<PetEntity,Integer>{
 
-
     Page<PetEntity> findByPetNameContainingIgnoreCase(String search, Pageable pageable);
+
+    @Query("SELECT p FROM PetEntity p WHERE str(p.ownerId) LIKE %:ownerId%")
+    Page<PetEntity> findByOwnerIdLike(@Param("ownerId") String ownerId, Pageable pageable);
 
     @Query("SELECT p.petName FROM PetEntity p WHERE p.petId = :petId")
     String findPetNameById(@Param("petId") Long petId);

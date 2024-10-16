@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>예약</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}" />
+    <div th:replace="common/header :: header"></div>
+</head>
+<body>
+<div class="container">
+    <div class="main">
+        <h1>예약 수정</h1>
+        <form th:action="@{/schedule/schUpdate}" method="post" th:object="${schedule}">
+            <input type="hidden" id="schId" name="schId" th:field="*{schId}">
+            <label for="petId">펫 ID:</label>
+            <input type="number" id="petId" name="petId" th:field="*{petId}" required readonly><br>
+
+            <label for="schDate">날짜:</label>
+            <input type="date" id="schDate" name="schDate" th:value="${schedule.schDate}" required><br>
+
+            <label for="schTime">시간:</label>
+            <input type="time" id="schTime" name="schTime" th:field="*{schTime}" required><br>
+
+            <label for="groomingStyle">미용 스타일:</label>
+            <input type="text" id="groomingStyle" name="groomingStyle" th:field="*{groomingStyle}" required><br>
+
+            <label for="groomingPrice">가격:</label>
+            <input type="number" id="groomingPrice" name="groomingPrice" th:field="*{groomingPrice}" required><br>
+
+            <label for="paymentMethod">결제 방법:</label>
+            <select id="paymentMethod" name="paymentMethod" th:field="*{paymentMethod}">
+                <option value="카드">카드</option>
+                <option value="현금">현금</option>
+                <option value="계좌이체">계좌이체</option>
+            </select><br>
+
+            <label for="schNotes">비고:</label>
+            <textarea id="schNotes" name="schNotes" th:field="*{schNotes}"></textarea><br>
+
+            <button type="submit">저장</button>
+        </form>
+    </div>
+</div>
+
+</body>
+</html>

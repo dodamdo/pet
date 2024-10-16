@@ -11,6 +11,7 @@ import org.springframework.data.repository.query.Param;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 public interface SchRepository extends JpaRepository<SchEntity,Integer>{
 
@@ -27,4 +28,5 @@ public interface SchRepository extends JpaRepository<SchEntity,Integer>{
     @Query("SELECT SUM(s.groomingPrice) FROM SchEntity s WHERE s.paymentMethod = :paymentMethod AND s.schDate >= :startDate AND s.schDate <= :endDate")
     Integer  TotalPriceByPaymentMethod(@Param("paymentMethod") String paymentMethod, @Param("startDate") LocalDate startDate, @Param("endDate") LocalDate endDate);
 
+    SchEntity findBySchId(Long schId);
 }

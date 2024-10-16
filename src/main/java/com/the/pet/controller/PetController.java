@@ -55,23 +55,39 @@ public class PetController {
     }
 
     @GetMapping("/pets/petSearch")
-    public String getpetSearch(@RequestParam(value = "search") String search,
-                             Model model,@PageableDefault(size = 10) Pageable pageable) {
+    public String getPetSearch(
+            @RequestParam(value = "search", required = false) String search,
+            Model model,
+            @PageableDefault(size = 10) Pageable pageable) {
 
-        pageable =PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), Sort.by("petId").descending());
-        Page<PetEntity> pets = petRepository.findByPetNameContainingIgnoreCase(search, pageable);
+        pageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), Sort.by("petId").descending());
+        Page<PetEntity> pets;
+        boolean isNumeric = search != null && search.matches("\\d+"); // 숫자열 확인
+        if (isNumeric) {
+            model.addAttribute("searchtype", "전화번호 검색");
+            pets = petRepository.findByOwnerIdLike(search, pageable);
+        } else {
+            model.addAttribute("searchtype", "애완동물 이름 검색");
+            pets = petRepository.findByPetNameContainingIgnoreCase(search, pageable); // 펫 이름으로 검색
+        }
+
+        for(PetEntity pet : pets){
+            if(pet.getOwnerId().toString().length()==8){
+                String formattedOwnerId = "010-" + pet.getOwnerId().toString().substring(0, 4) + "-" + pet.getOwnerId().toString().substring(4);
+                pet.setFormattedOwnerId(formattedOwnerId);
+            }
+        }
 
         model.addAttribute("pets", pets);
-        model.addAttribute("currentPage",pets.getNumber()+1);
-        model.addAttribute("totalPages",pets.getTotalPages());
+        model.addAttribute("currentPage", pets.getNumber() + 1);
+        model.addAttribute("totalPages", pets.getTotalPages());
         model.addAttribute("prevPage", pets.hasPrevious() ? pets.getNumber() - 1 : null);
         model.addAttribute("nextPage", pets.hasNext() ? pets.getNumber() + 1 : null);
-        model.addAttribute("lastPage",pets.getTotalPages()-1);
+        model.addAttribute("lastPage", pets.getTotalPages() - 1);
         model.addAttribute("search", search);
 
         return "pets/petSearch";
     }
-
     @GetMapping("/pets/petadd")
     public String petadd(Model model) {
         model.addAttribute("pet", new PetEntity());
@@ -107,4 +123,22 @@ public class PetController {
 
         return "pets/petDetail";
     }
+
+    @GetMapping("/pets/petUpdate")
+    public String showUpdateForm(@RequestParam("petId") Integer petId, Model model) {
+        PetEntity pet = petService.getPetById(petId);
+        model.addAttribute("pet",pet );
+        return "pets/petUpdate";
+    }
+
+    @PostMapping("/pets/petUpdate")
+    public String updatePet(@ModelAttribute("pet") PetEntity pet) {
+        petRepository.save(pet);
+        return "redirect:/pets/petDetail?petId="+pet.getPetId();
+    }
+
+
+
+
+
 }

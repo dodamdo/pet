@@ -137,7 +137,7 @@
             </tr>
             </thead>
             <tbody>
-            <tr th:each="sch : ${schList}">
+            <tr th:each="sch : ${schList}" th:onclick="'location.href=\'/schedule/schDetail?schId=' + ${sch.schId} + '\''" style="cursor: pointer;">
                 <td th:text="${sch.schDate}"></td>
                 <td th:text="${sch.schTime}"></td>
                 <td th:text="${sch.petName}"></td>

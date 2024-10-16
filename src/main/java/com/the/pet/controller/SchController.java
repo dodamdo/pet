@@ -170,4 +170,20 @@ public class SchController {
     }
 
 
+    @GetMapping("schedule/schUpdate")
+    public String getScheduleUpdate(@RequestParam("schId") Long schId, Model model) {
+
+        SchEntity schedule = schRepository.findBySchId(schId);
+        model.addAttribute("schedule", schedule);
+        System.out.println(schedule);
+        return "schedule/schUpdate";
+    }
+
+
+    @PostMapping("schedule/schUpdate")
+    public String schupdate(@ModelAttribute  SchEntity schentity) {
+        schRepository.save(schentity);
+        return "/schedule/schList";
+    }
+
 }
