@@ -37,6 +37,8 @@ dependencies {
 	providedRuntime 'org.springframework.boot:spring-boot-starter-tomcat'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+
+	implementation group: 'com.oracle.oci.sdk', name: 'oci-java-sdk-shaded-full', version: '3.10.0'
 }
 
 tasks.named('test') {
