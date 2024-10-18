@@ -1,27 +1,18 @@
 package com.the.pet.controller;
 
-import com.the.pet.model.entity.OwnerEntity;
 import com.the.pet.model.entity.PetEntity;
 import com.the.pet.model.entity.SchEntity;
 import com.the.pet.repository.PetRepository;
 import com.the.pet.repository.SchRepository;
-import com.the.pet.service.PetService;
 import com.the.pet.service.SchService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.web.PageableDefault;
-import org.springframework.http.ResponseEntity;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
-import java.time.YearMonth;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -185,5 +176,51 @@ public class SchController {
         schRepository.save(schentity);
         return "/schedule/schList";
     }
+
+
+    @GetMapping("/schedule/schAdd")
+    public String schAdd(
+            @RequestParam(value = "schDate", required = false) String schDate,
+            Model model){
+
+        model.addAttribute("schDate",schDate);
+        return "/schedule/schAdd";
+    }
+
+    @PostMapping("schedule/schAdd")
+    public String schAddDB(@ModelAttribute  SchEntity schentity) {
+        schRepository.save(schentity);
+        return "/schedule/schList";
+    }
+
+    @GetMapping("/schedule/petschinfo")
+    @ResponseBody
+    public List<SchEntity> petschinfo(
+            @RequestParam(value = "petId", required = false) Integer petId, Model model) {
+
+        List<SchEntity> schList = schRepository.findByPetIdOrderBySchDateAsc(petId);
+
+        // 최근 3개 예약 내역만 가져오기
+        if (schList.size() > 3) {
+            schList = schList.subList(schList.size() - 3, schList.size());
+        }
+
+        for (SchEntity sch : schList) {
+            String petName = petRepository.findPetNameById(sch.getPetId());
+            String ownerId = petRepository.findOwnerIdById(sch.getPetId());
+            if (ownerId.length() == 8) {
+                ownerId = "010-" + ownerId.substring(0, 4) + "-" + ownerId.substring(4);
+            }
+            sch.setPetName(petName);
+            sch.setOwnerId(ownerId);
+        }
+
+        return schList;
+    }
+
+
+
+
+
 
 }

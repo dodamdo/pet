@@ -14,10 +14,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -137,6 +134,22 @@ public class PetController {
         return "redirect:/pets/petDetail?petId="+pet.getPetId();
     }
 
+    @GetMapping("/pets/petinfo")
+    @ResponseBody
+    public List<PetEntity> petinfo(
+            @RequestParam(value = "search", required = false) String search, Model model) {
+
+        List<PetEntity> pets;
+        boolean isNumeric = search != null && search.matches("\\d+");
+        if (isNumeric) {
+            pets = petRepository.findByOwnerIdLike(search);
+        } else {
+            pets = petRepository.findByPetNameContainingIgnoreCase(search);
+        }
+
+
+        return pets;
+    }
 
 
 

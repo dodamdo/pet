@@ -5,6 +5,7 @@ import com.oracle.bmc.objectstorage.ObjectStorageClient;
 import com.oracle.bmc.objectstorage.requests.PutObjectRequest;
 import com.oracle.bmc.objectstorage.responses.PutObjectResponse;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
 
 import java.io.ByteArrayInputStream;

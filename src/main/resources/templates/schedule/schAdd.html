@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>예약 수정</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}" />
+    <div th:replace="common/header :: header"></div>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+            margin: 0;
+        }
+
+        .container {
+            display: flex;
+            justify-content: space-between; /* 좌우 배치 */
+            max-width: 1200px; /* 최대 너비 설정 */
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-section {
+            width: 48%; /* 각 폼의 너비 설정 */
+        }
+
+        h1 {
+            text-align: center;
+            color: #343a40;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            color: #495057;
+        }
+
+        input[type="text"],
+        input[type="number"],
+        input[type="date"],
+        input[type="time"],
+        select,
+        textarea {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ced4da;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        button {
+            background-color: #007bff;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            width: 100%;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        textarea {
+            resize: vertical;
+            height: 100px;
+        }
+
+        .pet-list {
+            border: 1px solid #ced4da;
+            border-radius: 4px;
+            max-height: 150px;
+            overflow-y: auto;
+            margin-top: 10px;
+            background-color: white;
+        }
+
+        .pet-item {
+            padding: 10px;
+            cursor: pointer;
+        }
+
+        .pet-item:hover {
+            background-color: #f1f1f1;
+        }
+
+        /* 예약 내역 테이블 스타일 */
+        .schedule-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 40px;
+        }
+
+        .schedule-table th, .schedule-table td {
+            border: 1px solid #ced4da;
+            padding: 10px;
+            text-align: left;
+        }
+
+        .schedule-table th {
+            background-color: #f8f9fa;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+
+    <div class="form-section">
+        <h1>애완동물 선택</h1>
+        <label for="petSearch">애완동물 검색:</label>
+        <input type="text" id="petSearch" name="search" placeholder="이름 혹은 번호 입력">
+        <div class="pet-list" id="petList"></div>
+
+
+        <h2>최근 예약 내역</h2>
+        <table class="schedule-table" id="scheduleTable">
+            <thead>
+            <tr>
+                <th>날짜</th>
+                <th>시간</th>
+                <th>미용 스타일</th>
+                <th>가격</th>
+                <th>적용</th>
+            </tr>
+            </thead>
+            <tbody id="scheduleBody"></tbody>
+        </table>
+    </div>
+
+
+
+    <div class="form-section">
+        <h1>예약 수정</h1>
+        <form action="/schedule/schAdd" method="post">
+            <label for="petId">펫 ID:</label>
+            <input type="hidden" id="petId" name="petId" required readonly>
+            <input type="text" id="petName" name="petName" required readonly>
+
+            <label for="schDate">날짜:</label>
+            <input type="date" id="schDate" name="schDate"
+                   th:value="${schDate != null ? schDate : T(java.time.LocalDate).now().toString()}"
+                   required>
+
+            <label for="schTime">시간:</label>
+            <input type="time" id="schTime" name="schTime" required>
+
+            <label for="groomingStyle">미용 스타일:</label>
+            <input type="text" id="groomingStyle" name="groomingStyle" required>
+
+            <label for="groomingPrice">가격:</label>
+            <input type="number" id="groomingPrice" name="groomingPrice" required>
+
+            <label for="paymentMethod">결제 방법:</label>
+            <select id="paymentMethod" name="paymentMethod">
+                <option value="카드">카드</option>
+                <option value="현금">현금</option>
+                <option value="계좌이체">계좌이체</option>
+            </select>
+
+            <label for="schNotes">비고:</label>
+            <textarea id="schNotes" name="schNotes"></textarea>
+
+            <button type="submit">저장</button>
+        </form>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function() {
+        $('#petSearch').on('input', function() {
+            const searchValue = $(this).val();
+            if (searchValue.length >= 2) {
+                $.ajax({
+                    url: '/pets/petinfo',
+                    method: 'GET',
+                    data: { search: searchValue },
+                    success: function(data) {
+                        console.log(data);
+                        $('#petList').empty();
+
+                        if (Array.isArray(data) && data.length > 0) {
+                            data.forEach(function(pet) {
+                                $('#petList').append(`
+                                    <div class="pet-item" data-id="${pet.petId}">${pet.petName}  / ${pet.ownerId}</div>
+                                `);
+                            });
+                        } else {
+                            $('#petList').append('<div>검색 결과가 없습니다.</div>');
+                        }
+                    },
+                    error: function(error) {
+                        console.error('검색 오류:', error);
+                    }
+                });
+            } else {
+                $('#petList').empty(); // 입력이 2글자 미만일 때 결과 삭제
+            }
+        });
+
+        $(document).on('click', '.pet-item', function() {
+            const selectedPetId = $(this).data('id');
+            const selectedPetName = $(this).text().split(' / ')[0];
+            $('#petId').val(selectedPetId);
+            $('#petName').val(selectedPetName);
+            $('#groomingStyle').val('');
+            $('#groomingPrice').val('');
+
+            $.ajax({
+                url: '/schedule/petschinfo',
+                method: 'GET',
+                data: { petId: selectedPetId },
+                success: function(data) {
+                    $('#scheduleBody').empty();
+
+                    if (data.length > 0) {
+                        data.forEach(function(sch) {
+                            $('#scheduleBody').append(`
+                                <tr>
+                                    <td>${sch.schDate}</td>
+                                    <td>${sch.schTime}</td>
+                                    <td>${sch.groomingStyle}</td>
+                                    <td>${sch.groomingPrice}</td>
+                                    <td><button class="apply-button" data-grooming-style="${sch.groomingStyle}" data-grooming-price="${sch.groomingPrice}">적용</button></td>
+                                </tr>
+                            `);
+                        });
+                    } else {
+                        $('#scheduleBody').append('<tr><td colspan="5">최근 예약 내역이 없습니다.</td></tr>');
+                    }
+                },
+                error: function(error) {
+                    console.error('예약 내역 조회 오류:', error);
+                }
+            });
+        });
+
+        $(document).on('click', '.apply-button', function() {
+            const groomingStyle = $(this).data('grooming-style');
+            const groomingPrice = $(this).data('grooming-price');
+            $('#groomingStyle').val(groomingStyle);
+            $('#groomingPrice').val(groomingPrice);
+        });
+    });
+</script>
+</body>
+</html>
