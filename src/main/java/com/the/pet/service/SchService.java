@@ -46,6 +46,9 @@ public class SchService {
         return (totalPrice != null) ? totalPrice : 0;
     }
 
+    public List<String> getPhotoUrlsByPetId(Long petId) {
+        return schRepository.findPhotoUrlsByPetId(petId);
+    }
 
 
 }

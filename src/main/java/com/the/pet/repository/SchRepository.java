@@ -29,4 +29,7 @@ public interface SchRepository extends JpaRepository<SchEntity,Integer>{
     Integer  TotalPriceByPaymentMethod(@Param("paymentMethod") String paymentMethod, @Param("startDate") LocalDate startDate, @Param("endDate") LocalDate endDate);
 
     SchEntity findBySchId(Long schId);
+
+    @Query("SELECT s.photoUrl FROM SchEntity s WHERE s.petId = :petId AND s.photoUrl IS NOT NULL")
+    List<String> findPhotoUrlsByPetId(@Param("petId") Long petId);
 }

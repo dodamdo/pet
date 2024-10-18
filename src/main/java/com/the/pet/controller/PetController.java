@@ -6,6 +6,7 @@ import com.the.pet.repository.PetRepository;
 import com.the.pet.repository.SchRepository;
 import com.the.pet.service.ObjectStorageService;
 import com.the.pet.service.PetService;
+import com.the.pet.service.SchService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -33,6 +34,8 @@ public class PetController {
     private SchRepository schRepository;
     @Autowired
     private PetRepository petRepository;
+    @Autowired
+    private SchService schService;
 
 
     @GetMapping("/pets/petList")
@@ -122,8 +125,9 @@ public class PetController {
             sch.setPetName(petName);
             sch.setOwnerId(ownerId);
         }
+        List<String> photoUrl = schService.getPhotoUrlsByPetId(Long.valueOf(petId));
         model.addAttribute("petsch",schList);
-
+        model.addAttribute("photoUrl",photoUrl);
         return "pets/petDetail";
     }
 

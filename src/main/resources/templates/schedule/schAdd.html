@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>예약 추가</title>
+    <title>예약</title>
     <link rel="stylesheet" th:href="@{/css/style.css}" />
     <div th:replace="common/header :: header"></div>
     <style>
@@ -15,7 +15,8 @@
 
         .container {
             display: flex;
-            justify-content: space-between;
+            flex-wrap: wrap; /* 여러 줄로 배치 */
+            justify-content: space-between; /* 좌우 배치 */
             max-width: 1200px; /* 최대 너비 설정 */
             margin: 0 auto;
             background: white;
@@ -25,10 +26,15 @@
         }
 
         .form-section {
-            width: 48%; /* 각 폼의 너비 설정 */
+            flex: 1 1 45%; /* 기본 너비 45% */
+            margin: 10px; /* 각 섹션 사이 여백 */
+            padding: 20px; /* 패딩 추가 */
+            background: #f9f9f9; /* 섹션 배경 색상 */
+            border-radius: 8px;
+            box-shadow: 0 1px 5px rgba(0, 0, 0, 0.1);
         }
 
-        h1 {
+        h1, h2 {
             text-align: center;
             color: #343a40;
         }
@@ -107,6 +113,12 @@
         .schedule-table th {
             background-color: #f8f9fa;
         }
+
+        @media (max-width: 768px) {
+            .form-section {
+                flex: 1 1 100%; /* 모바일에서는 전체 너비 사용 */
+            }
+        }
     </style>
 </head>
 <body>
@@ -117,14 +129,14 @@
         <label for="petSearch">애완동물 검색:</label>
         <input type="text" id="petSearch" name="search" placeholder="이름 혹은 번호 입력">
         <div class="pet-list" id="petList"></div>
+    </div>
 
-
+    <div class="form-section">
         <h2>최근 예약 내역</h2>
         <table class="schedule-table" id="scheduleTable">
             <thead>
             <tr>
                 <th>날짜</th>
-                <th>시간</th>
                 <th>미용 스타일</th>
                 <th>가격</th>
                 <th>적용</th>
@@ -133,8 +145,6 @@
             <tbody id="scheduleBody"></tbody>
         </table>
     </div>
-
-
 
     <div class="form-section">
         <h1>예약 수정</h1>
@@ -187,7 +197,7 @@
                         if (Array.isArray(data) && data.length > 0) {
                             data.forEach(function(pet) {
                                 $('#petList').append(`
-                                    <div class="pet-item" data-id="${pet.petId}">${pet.petName}  / ${pet.ownerId}</div>
+                                    <div class="pet-item" data-id="${pet.petId}">${pet.petName} / ${pet.ownerId}</div>
                                 `);
                             });
                         } else {
@@ -223,7 +233,6 @@
                             $('#scheduleBody').append(`
                                 <tr>
                                     <td>${sch.schDate}</td>
-                                    <td>${sch.schTime}</td>
                                     <td>${sch.groomingStyle}</td>
                                     <td>${sch.groomingPrice}</td>
                                     <td><button class="apply-button" data-grooming-style="${sch.groomingStyle}" data-grooming-price="${sch.groomingPrice}">적용</button></td>
@@ -231,7 +240,7 @@
                             `);
                         });
                     } else {
-                        $('#scheduleBody').append('<tr><td colspan="5">최근 예약 내역이 없습니다.</td></tr>');
+                        $('#scheduleBody').append('<tr><td colspan="4">최근 예약 내역이 없습니다.</td></tr>');
                     }
                 },
                 error: function(error) {
