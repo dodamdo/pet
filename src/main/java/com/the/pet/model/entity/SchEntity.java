@@ -49,6 +49,9 @@ public class SchEntity {
     @Column(name = "sch_notes", length = 255)
     private String schNotes;
 
+    @Column(name = "photo_url", length = 255)
+    private String photoUrl;
+
 
     public String getSchState() {
         return schState != null ? schState : ".";

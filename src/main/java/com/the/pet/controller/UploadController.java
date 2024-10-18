@@ -1,5 +1,7 @@
 package com.the.pet.controller;
 
+import com.the.pet.model.entity.SchEntity;
+import com.the.pet.repository.SchRepository;
 import com.the.pet.service.ObjectStorageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -16,31 +18,12 @@ import java.util.UUID;
 @Controller
 public class UploadController {
 
-    @Autowired
-    private ObjectStorageService objectStorageService;
+
 
     @GetMapping("/upload")
     public String uploadForm() {
         return "uploadForm";
     }
 
-    @PostMapping("/upload/photo")
-    public String uploadPhoto(@RequestParam("file") MultipartFile file, Model model) {
-        try {
-            String uniqueFileName = UUID.randomUUID().toString() + "_" + file.getOriginalFilename();
-            String filePath = System.getProperty("java.io.tmpdir") + file.getOriginalFilename();
-            file.transferTo(Paths.get(filePath));
-            objectStorageService.uploadPhoto(filePath, uniqueFileName);
 
-
-            model.addAttribute("message", "파일 업로드 성공!");
-
-
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            model.addAttribute("message", "파일 업로드 실패: " + e.getMessage());
-        }
-        return "uploadForm";
-    }
 }

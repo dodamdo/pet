@@ -73,7 +73,41 @@
     .update-button:hover {
         background-color: #0056b3;
     }
+     /* 모달 스타일 */
+        .modal {
+            display: none; /* 기본적으로 숨김 */
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.5); /* 반투명 배경 */
+        }
 
+        .modal-content {
+            background-color: #fff;
+            margin: 15% auto;
+            padding: 20px;
+            border-radius: 5px;
+            width: 300px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
 
     </style>
 </head>
@@ -114,13 +148,14 @@
     <table class="schedule">
         <thead>
         <tr>
-            <th>예약 날짜</th>
-            <th>예약 시간</th>
-            <th>그루밍 스타일</th>
-            <th>결제 방식</th>
+            <th>예약일</th>
+            <th>예약시간</th>
+            <th>미용</th>
+            <th>결제</th>
             <th>가격</th>
-            <th>예약 상태</th>
+            <th>예약상태</th>
             <th>메모</th>
+            <th>사진등록</th>
         </tr>
         </thead>
         <tbody>
@@ -132,9 +167,64 @@
             <td th:text="${sch.groomingPrice}"></td>
             <td th:text="${sch.schState}"></td>
             <td th:text="${sch.schNotes}"></td>
+            <td >
+                <span th:if="${sch.photoUrl == null}">
+                    <button class="openModalButton" th:data-schid="${sch.schId}">사진 등록</button>
+                </span>
+                <img th:if="${sch != null and sch.photoUrl != null}"
+                     th:src="'https://objectstorage.ap-chuncheon-1.oraclecloud.com/n/ax6zqcd108vv/b/dodam/o/' + ${sch.photoUrl}"
+                     alt="예약 사진" style="width: 50px; height: auto;"/>
+            </td>
         </tr>
         </tbody>
     </table>
 </div>
+
+
+<div id="photoModal" class="modal">
+    <div class="modal-content">
+        <span class="close" id="closeModal">&times;</span>
+        <h2>사진 업로드</h2>
+        <form method="POST" enctype="multipart/form-data" action="/upload/photo">
+
+            <input type="text" id="schId" name="schId" value="" required />
+            <input type="text" id="petId" name="petId" th:value="${pet.petId}" required />
+            <input type="file" name="file" required />
+            <button type="submit">업로드</button>
+        </form>
+    </div>
+</div>
+
+
+
+
+
+<script>
+    const modal = document.getElementById('photoModal');
+    const closeModalButton = document.getElementById('closeModal');
+
+    const openModalButtons = document.querySelectorAll('.openModalButton');
+    openModalButtons.forEach(button => {
+        button.onclick = function() {
+        const schId = this.getAttribute('data-schid');
+        document.getElementById('schId').value = schId;
+        modal.style.display = "block";
+        }
+    });
+
+    closeModalButton.onclick = function() {
+        modal.style.display = "none";
+    }
+
+window.onclick = function(event) {
+    if (event.target === modal) {
+        modal.style.display = "none";
+    }
+}
+    const alertMessage = /*[[${alertMessage}]]*/ '';
+    if (alertMessage) {
+        alert(alertMessage);
+    }
+</script>
 </body>
 </html>

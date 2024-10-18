@@ -4,6 +4,7 @@ import com.the.pet.model.entity.PetEntity;
 import com.the.pet.model.entity.SchEntity;
 import com.the.pet.repository.PetRepository;
 import com.the.pet.repository.SchRepository;
+import com.the.pet.service.ObjectStorageService;
 import com.the.pet.service.PetService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,19 +16,24 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.nio.file.Paths;
 import java.util.List;
+import java.util.UUID;
 
 @Controller
 @Slf4j
 public class PetController {
     @Autowired
     private PetService petService;
-
     @Autowired
-    private PetRepository petRepository;
+    private ObjectStorageService objectStorageService;
     @Autowired
     private SchRepository schRepository;
+    @Autowired
+    private PetRepository petRepository;
+
 
     @GetMapping("/pets/petList")
     public String getAllPets( Model model,@PageableDefault(size = 10) Pageable pageable) {
@@ -151,7 +157,35 @@ public class PetController {
         return pets;
     }
 
+    @PostMapping("/upload/photo")
+    public String uploadPhoto(@RequestParam("file") MultipartFile file,
+                              @RequestParam("schId") Long schId,
+                              @RequestParam("petId") Long petId,
+                              Model model) {
+        try {
+            String uniqueFileName = UUID.randomUUID().toString() + "_" + file.getOriginalFilename();
+            String filePath = System.getProperty("java.io.tmpdir") + "/"+ file.getOriginalFilename();
+            file.transferTo(Paths.get(filePath));
+            objectStorageService.uploadPhoto(filePath, uniqueFileName);
 
+            SchEntity sch = schRepository.findBySchId(schId);
+            if (sch != null) {
+                sch.setPhotoUrl(uniqueFileName);
+                schRepository.save(sch);
+                model.addAttribute("message", "파일 업로드 성공!");
+            } else {
+                model.addAttribute("message", "예약 정보를 찾을 수 없습니다.");
+            }
+            model.addAttribute("message", "파일 업로드 성공!");
+
+
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            model.addAttribute("message", "파일 업로드 실패: " + e.getMessage());
+        }
+        return "redirect:/pets/petDetail?petId="+petId;
+    }
 
 
 }

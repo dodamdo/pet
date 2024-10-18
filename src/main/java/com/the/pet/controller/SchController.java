@@ -161,7 +161,7 @@ public class SchController {
     }
 
 
-    @GetMapping("schedule/schUpdate")
+    @GetMapping("/schedule/schUpdate")
     public String getScheduleUpdate(@RequestParam("schId") Long schId, Model model) {
 
         SchEntity schedule = schRepository.findBySchId(schId);
@@ -171,26 +171,22 @@ public class SchController {
     }
 
 
-    @PostMapping("schedule/schUpdate")
+    @PostMapping("/schedule/schUpdate")
     public String schupdate(@ModelAttribute  SchEntity schentity) {
         schRepository.save(schentity);
-        return "/schedule/schList";
+        return "schedule/schList";
     }
 
 
     @GetMapping("/schedule/schAdd")
-    public String schAdd(
-            @RequestParam(value = "schDate", required = false) String schDate,
-            Model model){
-
-        model.addAttribute("schDate",schDate);
-        return "/schedule/schAdd";
+    public String schAdd( ){
+        return "schedule/schAdd";
     }
 
-    @PostMapping("schedule/schAdd")
+    @PostMapping("/schedule/schAdd")
     public String schAddDB(@ModelAttribute  SchEntity schentity) {
         schRepository.save(schentity);
-        return "/schedule/schList";
+        return "schedule/schList";
     }
 
     @GetMapping("/schedule/petschinfo")
