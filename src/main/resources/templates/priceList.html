@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>가격표</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}" />
+    <div th:replace="common/header :: header"></div>
+    <style>
+
+        .image-container {
+            text-align: center;
+            margin-top: 20px;
+        }
+        .image-container img {
+            max-width: 100%;
+            height: auto;
+        }
+    </style>
+</head>
+<body>
+<div class="image-container">
+    <img th:src="@{/images/pricetable.jpg}" alt="가격표 이미지" />
+</div>
+</body>
+</html>

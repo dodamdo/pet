@@ -6,7 +6,7 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #f9f9f9;
+            background-color: #FAE7ED;
             color: #333;
             margin: 0;
         }
@@ -20,7 +20,7 @@
         }
 
         h1 {
-            color: #4CAF50;
+            color: black;
             text-align: center;
         }
 
@@ -42,8 +42,8 @@
         }
 
         table th {
-            background-color: #4CAF50;
-            color: white;
+            background-color: #F2C6D2;
+            color: black;
             font-weight: bold;
         }
 
@@ -58,24 +58,25 @@
         td {
             vertical-align: top;
         }
-        .update-button {
-        display: inline-block;
-        padding: 10px 15px;
-        border: none;
-        border-radius: 4px;
-        background-color: #4CAF50;
-        color: white;
-        text-decoration: none;
-        font-size: 16px;
-        transition: background-color 0.3s;
-    }
 
-    .update-button:hover {
-        background-color: #0056b3;
-    }
-     /* 모달 스타일 */
+        .update-button {
+            display: inline-block;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            background-color: #F2C6D2;
+            color: black;
+            text-decoration: none;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+
+        .update-button:hover {
+            background-color: #FAE7ED;
+        }
+
         .modal {
-            display: none; /* 기본적으로 숨김 */
+            display: none;
             position: fixed;
             z-index: 1;
             left: 0;
@@ -83,7 +84,7 @@
             width: 100%;
             height: 100%;
             overflow: auto;
-            background-color: rgba(0, 0, 0, 0.5); /* 반투명 배경 */
+            background-color: rgba(0, 0, 0, 0.5);
         }
 
         .modal-content {
@@ -109,20 +110,21 @@
             cursor: pointer;
         }
 
-
         .photo-slider {
             display: flex;
             align-items: center;
             justify-content: center;
             position: relative;
             margin-top: 20px;
+            width: 80%;
+            height: 300px;
         }
 
         .slides {
             display: flex;
             overflow: hidden;
-            width: 80%; /* 원하는 너비 조정 */
-            height: 300px; /* 원하는 높이 조정 */
+            width: 80%;
+            height: 300px;
         }
 
         .slides img {
@@ -145,6 +147,41 @@
             z-index: 1;
         }
 
+        #lightbox {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999; /* 위에 띄우기 위한 설정 */
+        }
+
+        #close {
+            position: absolute;
+            top: 20px;
+            right: 30px;
+            font-size: 30px;
+            color: white;
+        }
+
+        .edit-button {
+            background-color: #F2C6D2;
+            color: black;
+            padding: 8px 12px;
+            border-radius: 5px;
+            text-decoration: none;
+            transition: background-color 0.3s;
+        }
+
+        .edit-button:hover {
+            background-color: #FAE7ED;
+        }
+
     </style>
 </head>
 <body>
@@ -153,6 +190,24 @@
     <h1 th:text="${pet.petName} + '의 세부 정보'"></h1>
     <a th:href="@{/pets/petUpdate(petId=${pet.petId})}" class="update-button">정보수정</a>
     <table class="pet-detail">
+        <tr>
+            <td colspan="6">
+                <div class="photo-slider">
+                    <button class="prev">&lt;</button>
+                    <div class="slides">
+                        <div th:each="url, iterStat : ${photoUrls}" class="photo-item">
+                            <figure>
+                                <img th:src="'https://objectstorage.ap-chuncheon-1.oraclecloud.com/n/ax6zqcd108vv/b/dodam/o/' + ${url}"
+                                     alt="예약 사진" style="display: none; max-width: 90%; max-height: 200px;"
+                                     th:id="'photo_' + ${iterStat.index}" class="thumbnail" />
+                                <figcaption>사진 ${iterStat.index + 1}</figcaption>
+                            </figure>
+                        </div>
+                    </div>
+                    <button class="next">&gt;</button>
+                </div>
+            </td>
+        </tr>
         <tr>
             <td>품종</td>
             <td th:text="${pet.petBreed}">품종</td>
@@ -167,7 +222,7 @@
         </tr>
         <tr>
             <td>무게</td>
-            <td th:text="${pet.petWeight}">무게</td>
+            <td th:text="${pet.petWeight}">몸무게</td>
         </tr>
         <tr>
             <td>주인 번호</td>
@@ -178,106 +233,151 @@
             <td th:text="${pet.petNotes}">메모</td>
         </tr>
     </table>
-    <div class="photo-gallery">
-        <div class="photo-item">
-            <img th:src="'https://objectstorage.ap-chuncheon-1.oraclecloud.com/n/ax6zqcd108vv/b/dodam/o/' + ${photoUrls[0]}"
-                 alt="Pet Photo" id="currentPhoto" />
-        </div>
+
+    <div id="lightbox" style="display: none;">
+        <span id="close" style="cursor: pointer;">&times;</span>
+        <img id="largePhoto" style="width: 100%; height: auto;" />
+        <button id="next" style="display: block;">다음</button>
     </div>
-    <button id="nextButton">다음 사진</button>
 
     <h1>전체 예약</h1>
-
     <table class="schedule">
         <thead>
         <tr>
             <th>예약일</th>
-            <th>예약시간</th>
-            <th>미용</th>
+            <th>스타일</th>
             <th>결제</th>
             <th>가격</th>
-            <th>예약상태</th>
+            <th>예약</th>
             <th>메모</th>
-            <th>사진등록</th>
         </tr>
         </thead>
         <tbody>
-        <tr th:each="sch : ${petsch}">
-            <td th:text="${sch.schDate}"></td>
-            <td th:text="${sch.schTime}"></td>
-            <td th:text="${sch.groomingStyle}"></td>
-            <td th:text="${sch.paymentMethod}"></td>
-            <td th:text="${sch.groomingPrice}"></td>
-            <td th:text="${sch.schState}"></td>
-            <td th:text="${sch.schNotes}"></td>
-            <td >
+            <tr th:each="sch : ${petsch}" class="schedule-row"
+                       th:data-schid="${sch.schId}" th:data-notes="${sch.schNotes}" >
+                <td th:text="${sch.schDate}"></td>
+                <td th:text="${sch.groomingStyle}"></td>
+                <td th:text="${sch.paymentMethod}"></td>
+                <td th:text="${sch.groomingPrice}"></td>
+                <td th:text="${sch.schNotes}"></td>
+                <td>
                 <span th:if="${sch.photoUrl == null}">
                     <button class="openModalButton" th:data-schid="${sch.schId}">사진 등록</button>
                 </span>
-                <img th:if="${sch != null and sch.photoUrl != null}"
-                     th:src="'https://objectstorage.ap-chuncheon-1.oraclecloud.com/n/ax6zqcd108vv/b/dodam/o/' + ${sch.photoUrl}"
-                     alt="예약 사진" style="width: 50px; height: auto;"/>
-            </td>
-        </tr>
+                    <img th:if="${sch != null and sch.photoUrl != null}"
+                         th:src="'https://objectstorage.ap-chuncheon-1.oraclecloud.com/n/ax6zqcd108vv/b/dodam/o/' + ${sch.photoUrl}"
+                         alt="예약 사진" style="width: 50px; height: auto;"/>
+                </td>
+            </tr>
         </tbody>
     </table>
 </div>
 
+<div id="infoModal" class="modal">
+    <div class="modal-content">
+        <span class="close" id="closeInfoModal">&times;</span>
+        <h2>예약 세부 정보</h2>
+        <button class="openModalButton" id="infoModalOpenButton">사진 등록</button>
+        <form id="infoForm" method="POST" action="/schedule/schmemoupdate">
+            <input type="hidden" id="infomodalSchId" name="schId" required />
+            <input type="hidden" name="petId" th:value="${pet.petId}" required />
+            <textarea id="schNotes" name="schNotes"   rows="10" cols="50"> </textarea><br>
+            <button type="submit">메모수정</button>
+        </form>
+    </div>
+</div>
 
+<!-- 사진 업로드 모달 -->
 <div id="photoModal" class="modal">
     <div class="modal-content">
-        <span class="close" id="closeModal">&times;</span>
-        <h2>사진 업로드</h2>
-        <form method="POST" enctype="multipart/form-data" action="/upload/photo">
-
-            <input type="text" id="schId" name="schId" value="" required />
-            <input type="text" id="petId" name="petId" th:value="${pet.petId}" required />
-            <input type="file" name="file" required />
-            <button type="submit">업로드</button>
+        <span class="close" id="closePhotoModal">&times;</span>
+        <h2>사진 등록</h2>
+        <form id="uploadForm" th:action="@{/pets/uploadPhoto}" method="post" enctype="multipart/form-data">
+            <input type="hidden" name="schId" id="modalSchId" />
+            <input type="hidden" id="petId" name="petId" th:value="${pet.petId}" required />
+            <input type="file" name="file" accept="image/*" required />
+            <input type="submit" value="업로드" />
         </form>
     </div>
 </div>
 
 
 
-
-
 <script>
-    const modal = document.getElementById('photoModal');
-    const closeModalButton = document.getElementById('closeModal');
+    document.addEventListener('DOMContentLoaded', function () {
+        const slides = document.querySelectorAll('.slides img');
+        let currentSlide = 0;
+        slides[currentSlide].classList.add('active');
 
-    const openModalButtons = document.querySelectorAll('.openModalButton');
-    openModalButtons.forEach(button => {
-        button.onclick = function() {
-        const schId = this.getAttribute('data-schid');
-        document.getElementById('schId').value = schId;
-        modal.style.display = "block";
-        }
-    });
+        document.querySelector('.prev').addEventListener('click', function () {
+            slides[currentSlide].classList.remove('active');
+            currentSlide = (currentSlide === 0) ? slides.length - 1 : currentSlide - 1;
+            slides[currentSlide].classList.add('active');
+        });
 
-    closeModalButton.onclick = function() {
-        modal.style.display = "none";
-    }
+        document.querySelector('.next').addEventListener('click', function () {
+            slides[currentSlide].classList.remove('active');
+            currentSlide = (currentSlide === slides.length - 1) ? 0 : currentSlide + 1;
+            slides[currentSlide].classList.add('active');
+        });
 
-    window.onclick = function(event) {
-        if (event.target === modal) {
-            modal.style.display = "none";
-        }
-    }
-    const alertMessage = /*[[${alertMessage}]]*/ '';
-    if (alertMessage) {
-        alert(alertMessage);
-    }
+        const lightbox = document.getElementById('lightbox');
+        const largePhoto = document.getElementById('largePhoto');
+        const closeLightbox = document.getElementById('close');
 
-    const photoUrls = /*[[${photoUrls}]]*/ []; // 서버에서 전달된 photoUrls 배열
-    let currentIndex = 0;
+        document.querySelectorAll('.slides img').forEach(img => {
+            img.addEventListener('click', function () {
+                lightbox.style.display = 'flex';
+                largePhoto.src = this.src;
+            });
+        });
 
-    document.getElementById('nextButton').addEventListener('click', function() {
-        currentIndex++;
-        if (currentIndex >= photoUrls.length) {
-            currentIndex = 0;
-        }
-        document.getElementById('currentPhoto').src = photoUrls[currentIndex];
+        closeLightbox.addEventListener('click', function () {
+            lightbox.style.display = 'none';
+        });
+
+        document.getElementById('next').addEventListener('click', function () {
+            const currentImg = document.querySelector(`img[src="${largePhoto.src}"]`);
+            let nextImg = currentImg.nextElementSibling || slides[0];
+            largePhoto.src = nextImg.src;
+        });
+
+        const openModalButtons = document.querySelectorAll('.openModalButton');
+        openModalButtons.forEach(button => {
+            button.addEventListener('click', function () {
+                event.stopPropagation();
+                const schId = this.getAttribute('data-schid');
+                document.getElementById('modalSchId').value = schId;
+                document.getElementById('photoModal').style.display = 'block';
+                document.getElementById('infoModal').style.display = 'none';
+            });
+        });
+
+        const closePhotoModal = document.getElementById('closePhotoModal');
+        closePhotoModal.addEventListener('click', function () {
+            document.getElementById('photoModal').style.display = 'none';
+        });
+
+        const scheduleRows = document.querySelectorAll('.schedule-row');
+        scheduleRows.forEach(row => {
+            row.addEventListener('click', function () {
+                const schId = this.getAttribute('data-schid');
+                const notes = this.getAttribute('data-notes');
+                document.getElementById('infomodalSchId').value = schId;
+                document.getElementById('schNotes').textContent = notes;
+                document.getElementById('infoModal').style.display = 'block';
+
+                const infoModalOpenButton = document.getElementById('infoModalOpenButton');
+                infoModalOpenButton.setAttribute('data-schid', schId);
+
+                document.getElementById('photoModal').style.display = 'none';
+            });
+        });
+
+        const closeInfoModal = document.getElementById('closeInfoModal');
+        closeInfoModal.addEventListener('click', function () {
+            document.getElementById('infoModal').style.display = 'none';
+        });
     });
 </script>
 </body>

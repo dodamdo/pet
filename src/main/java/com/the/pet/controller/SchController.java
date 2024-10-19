@@ -194,7 +194,7 @@ public class SchController {
     public List<SchEntity> petschinfo(
             @RequestParam(value = "petId", required = false) Integer petId, Model model) {
 
-        List<SchEntity> schList = schRepository.findByPetIdOrderBySchDateAsc(petId);
+        List<SchEntity> schList = schRepository.findByPetIdOrderBySchDateDesc(petId);
 
         // 최근 3개 예약 내역만 가져오기
         if (schList.size() > 3) {
@@ -214,6 +214,14 @@ public class SchController {
         return schList;
     }
 
+    @PostMapping("/schedule/schmemoupdate")
+    public String schmemoupdate(@RequestParam Integer schId, @RequestParam String schNotes,
+                                @RequestParam(value = "petId") Integer petId) {
+        SchEntity schedule = schRepository.findById(schId).orElse(null);
+        schedule.setSchNotes(schNotes);
+        schRepository.save(schedule);
+        return "redirect:/pets/petDetail?petId="+petId;
+    }
 
 
 

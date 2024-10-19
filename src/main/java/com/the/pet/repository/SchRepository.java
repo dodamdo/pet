@@ -21,6 +21,7 @@ public interface SchRepository extends JpaRepository<SchEntity,Integer>{
 
     List<SchEntity> findBySchDateOrderBySchTimeAsc(LocalDate schDate);
     List<SchEntity> findByPetIdOrderBySchDateAsc(Integer petId);
+    List<SchEntity> findByPetIdOrderBySchDateDesc(Integer petId);
 
     @Query("SELECT SUM(s.groomingPrice) FROM SchEntity s WHERE s.paymentMethod = :paymentMethod AND s.schDate >= :startDate AND s.schDate < :nextMonthStart")
     Integer  findTotalPriceByPaymentMethod(@Param("paymentMethod") String paymentMethod, @Param("startDate") LocalDate startDate, @Param("nextMonthStart") LocalDate nextMonthStart);

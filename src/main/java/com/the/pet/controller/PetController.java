@@ -115,7 +115,9 @@ public class PetController {
             pet.setFormattedOwnerId(formattedOwnerId);
         }
         model.addAttribute("pet", pet);
-        List<SchEntity> schList = schRepository.findByPetIdOrderBySchDateAsc(petId);
+
+
+        List<SchEntity> schList = schRepository.findByPetIdOrderBySchDateDesc(petId);
         for (SchEntity sch : schList) {
             String petName=petRepository.findPetNameById(sch.getPetId());
             String ownerId=petRepository.findOwnerIdById(sch.getPetId());
@@ -125,9 +127,14 @@ public class PetController {
             sch.setPetName(petName);
             sch.setOwnerId(ownerId);
         }
-        List<String> photoUrl = schService.getPhotoUrlsByPetId(Long.valueOf(petId));
+        List<String> photoUrls = schService.getPhotoUrlsByPetId(Long.valueOf(petId));
+        if (photoUrls == null || photoUrls.isEmpty()) {
+            photoUrls = List.of("default-pet.jpg");
+        }
+        System.out.println("img list :  ------------"+photoUrls);
+
         model.addAttribute("petsch",schList);
-        model.addAttribute("photoUrl",photoUrl);
+        model.addAttribute("photoUrls",photoUrls);
         return "pets/petDetail";
     }
 

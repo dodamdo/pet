@@ -36,43 +36,43 @@
             padding: 10px 15px;
             border: none;
             border-radius: 4px;
-            background-color: #007bff; /* 버튼 색상 */
-            color: white; /* 버튼 텍스트 색상 */
+            background-color: #F2C6D2 ;
+            color: black;
             cursor: pointer;
             font-size: 16px;
             transition: background-color 0.3s;
         }
 
         button:hover {
-            background-color: #0056b3; /* 호버 시 버튼 색상 */
+            background-color: #FAE7ED  ;
         }
 
         table {
-            width: 100%; /* 테이블 너비 */
-            border-collapse: collapse; /* 테두리 겹침 방지 */
-            margin-top: 20px; /* 테이블과 상단 요소 간 간격 */
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* 테이블 그림자 */
-            background-color: #fff; /* 테이블 배경색 */
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            background-color: #fff;
         }
 
         th, td {
-            border: 1px solid #ccc; /* 테두리 */
+            border: 1px solid #ccc;
             padding: 12px; /* 패딩 */
-            text-align: left; /* 왼쪽 정렬 */
+            text-align: left;
         }
 
         th {
-            background-color: #f0f0f0; /* 헤더 배경색 */
-            color: #333; /* 헤더 텍스트 색상 */
+            background-color: #FAE7ED ;
+            color: #333;
         }
 
         td {
-            color: #555; /* 데이터 텍스트 색상 */
+            color: #555;
         }
 
         .pagination {
-            margin-top: 20px; /* 페이지네이션과 테이블 간 간격 */
-            text-align: center; /* 페이지네이션 가운데 정렬 */
+            margin-top: 20px;
+            text-align: center;
         }
 
         .pagination a {
@@ -86,41 +86,41 @@
         }
 
         .pagination a:hover {
-            background-color: #007bff; /* 호버 시 배경색 */
-            color: white; /* 호버 시 텍스트 색상 */
+            background-color: #007bff;
+            color: white;
         }
 
         .pagination span {
-            margin: 0 10px; /* 페이지 번호 간 간격 */
+            margin: 0 10px;
             font-size: 16px;
         }
 
         /* 모바일 반응형 설정 */
         @media (max-width: 600px) {
             .search-container {
-                flex-direction: column; /* 세로 정렬 */
-                align-items: flex-end; /* 오른쪽 정렬 */
+                flex-direction: column;
+                align-items: flex-end;
             }
 
             input[type="text"] {
-                width: 100%; /* 모바일에서 입력창 전체 너비 */
-                margin-bottom: 10px; /* 아래 간격 추가 */
+                width: 100%;
+                margin-bottom: 10px;
             }
 
             button {
-                width: 100%; /* 모바일에서 버튼 전체 너비 */
+                width: 100%;
             }
 
             table {
-                font-size: 14px; /* 테이블 폰트 크기 감소 */
+                font-size: 14px;
             }
 
             th, td {
-                padding: 8px; /* 모바일에서 패딩 감소 */
+                padding: 8px;
             }
 
             .pagination a {
-                padding: 8px; /* 모바일에서 페이지네이션 패딩 감소 */
+                padding: 8px;
             }
         }
     </style>
@@ -129,10 +129,10 @@
 
 <div th:replace="common/header :: header"></div>
 <div class="main">
-    <h1>펫 리스트</h1>
+    <h1>반려동물 리스트</h1>
     <div class="search-container">
         <form th:action="@{/pets/petSearch}" method="get">
-            <input type="text" name="search" placeholder="주인번호검색.." required />
+            <input type="text" name="search" placeholder="번호 /  이름 검색.." required />
             <button type="submit">검색</button>
         </form>
     </div>
@@ -140,11 +140,11 @@
         <thead>
         <tr>
             <th>이름</th>
-            <th>주인번호</th>
+            <th>연락처</th>
             <th>품종</th>
             <th>성별</th>
             <th>나이</th>
-            <th>체중</th>
+            <th>몸무게</th>
             <th>메모</th>
         </tr>
         </thead>

@@ -21,40 +21,10 @@
             box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
         }
 
-        form {
-            display: flex;
-            justify-content: space-between;
-            gap: 15px;
-            margin-bottom: 20px;
-            align-items: center;
-        }
-
-        input[type="date"] {
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            width: calc(50% - 10px);
-        }
-
-        button {
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            padding: 12px 20px;
-            font-size: 16px;
-            cursor: pointer;
-            border-radius: 5px;
-            transition: background-color 0.3s;
-        }
-
-        button:hover {
-            background-color: #45a049;
-        }
-
         table {
             width: 100%;
             border-collapse: collapse;
-            margin-top: 20px;
+            margin-bottom: 20px; /* 아래쪽 마진 추가 */
         }
 
         th, td {
@@ -65,6 +35,21 @@
 
         th {
             background-color: #f2f2f2;
+        }
+
+        button {
+            background-color: #F2C6D2;
+            color: black;
+            border: none;
+            padding: 12px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #FAE7ED;
         }
 
         #result {
@@ -83,15 +68,21 @@
 <body>
 <div th:replace="common/header :: header"></div>
 <div class="main">
-    <form id="calculateForm" method="get">
-        <label for="startDate">시작 날짜:</label>
-        <input type="date" id="startDate" name="startDate" required />
-
-        <label for="endDate">종료 날짜:</label>
-        <input type="date" id="endDate" name="endDate" required />
-
-        <button type="submit">계산</button>
-    </form>
+    <table>
+        <tr>
+            <th>시작 날짜</th>
+            <td><input type="date" id="startDate" name="startDate" required /></td>
+        </tr>
+        <tr>
+            <th>종료 날짜</th>
+            <td><input type="date" id="endDate" name="endDate" required /></td>
+        </tr>
+        <tr>
+            <td colspan="2" style="text-align: center;">
+                <button type="submit" id="calculateButton">계산</button>
+            </td>
+        </tr>
+    </table>
 
     <div id="result">
         <table>
@@ -121,7 +112,7 @@
 
 <script>
     $(document).ready(function() {
-        $('#calculateForm').on('submit', function(event) {
+        $('#calculateButton').on('click', function(event) {
             event.preventDefault();
             const startDate = $('#startDate').val();
             const endDate = $('#endDate').val();

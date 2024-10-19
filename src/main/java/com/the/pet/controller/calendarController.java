@@ -14,7 +14,10 @@ import java.time.LocalDate;
 @Slf4j
 public class calendarController {
 
-
+    @GetMapping("/priceList")
+    public String showPriceTable() {
+        return "priceList";
+    }
 
 
 

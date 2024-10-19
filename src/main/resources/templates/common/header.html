@@ -8,16 +8,21 @@
 </head>
 <body>
 
-<div th:fragment="header">
-    <div class="navbar">
-        <a th:href="@{/owners/ownerList}">주인</a>
-        <a th:href="@{/pets/petList}">애완동물</a>
-        <a th:href="@{/calendar}">달력</a>
-        <a th:href="@{/schedule/schList}">스케줄</a>
+<div th:fragment="header" class="navbar">
+    <a th:href="@{/calendar}" class="logo-container">
+        <img th:src="@{/images/logo.jpg}" alt="Logo" class="logo" />
+    </a>
+    <div class="nav-links">
+        <a th:href="@{/priceList}">가격표</a>
+        <a th:href="@{/pets/petList}">반려동물</a>
+        <a th:href="@{/schedule/schList}">예약내역</a>
         <a th:href="@{/outcome}">매출</a>
         <a th:href="@{/pets/petadd}">신규등록</a>
         <a th:href="@{/schedule/schAdd}">예약</a>
+        <a th:href="@{/calendar}" class="right">달력</a>
+        <div>    </div>
     </div>
 </div>
+
 </body>
 </html>
