@@ -168,7 +168,7 @@ public class PetController {
         return pets;
     }
 
-    @PostMapping("/upload/photo")
+    @PostMapping("/pets/uploadPhoto")
     public String uploadPhoto(@RequestParam("file") MultipartFile file,
                               @RequestParam("schId") Long schId,
                               @RequestParam("petId") Long petId,

@@ -9,29 +9,43 @@ body {
     font-family: Arial, Helvetica, sans-serif;
 }
 
-
-
-
-/* Navbar */
+/* Navbar 스타일 */
 .navbar {
     display: flex;
     align-items: center; /* 세로 중앙 정렬 */
     justify-content: space-between; /* 로고와 메뉴 양쪽 배치 */
     background-color: #FAE7ED;
-
+    padding: 10px 20px;
 }
 
-/* 네비게이션 링크 */
+/* Nav 링크 컨테이너 스타일 */
 .nav-links {
     display: flex;
-    gap: 15px; /* 메뉴 간격 조절 */
     align-items: center;
-     text-decoration: none;
+    gap: 20px; /* 메뉴 간격 */
+}
+
+/* Nav 링크 개별 항목 스타일 */
+.nav-links a {
+    display: flex; /* 내부 정렬을 위해 flex 사용 */
+    align-items: center; /* 세로 중앙 정렬 */
+    justify-content: center; /* 가로 중앙 정렬 */
+    font-size: 18px; /* 글씨 크기 */
+    color: #333; /* 텍스트 색상 */
+    text-decoration: none; /* 텍스트 장식 제거 */
+    padding: 10px 15px; /* 여백 */
+    height: 50px; /* 동일한 높이 부여 */
+    border-right: 1px solid #ddd; /* 경계선 추가 */
+}
+
+/* 마지막 항목의 경계선 제거 */
+.nav-links a:last-child {
+    border-right: none;
 }
 
 /* 로고 스타일 */
 .logo {
-    height: 80px; /* 크기 조정 */
+    height: 80px; /* 로고 높이 조정 */
     width: auto;
     margin-left: 20px;
 }
@@ -51,16 +65,10 @@ body {
     }
 }
 
-
-@media screen and (max-width: 700px) {
-    .row {
-        flex-direction: column;
-    }
-}
-
 @media screen and (max-width: 400px) {
     .navbar a {
         float: none;
         width: 100%;
+        text-align: center;
     }
 }
