@@ -5,64 +5,116 @@
     <link rel="stylesheet" th:href="@{/css/style.css}" />
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <style>
-        body {
-            font-family: 'Noto Sans KR', sans-serif;
-            background-color: #f4f4f4;
-            margin: 0;
-            padding: 0;
-        }
+        <style>
+            body {
+                font-family: 'Noto Sans KR', sans-serif;
+                background-color: #f4f4f4;
+                margin: 0;
+                padding: 0;
+            }
 
-        .main {
-            max-width: 800px;
-            margin: 50px auto;
-            background-color: #ffffff;
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
-        }
+            .main {
+                max-width: 800px;
+                margin: 50px auto;
+                background-color: #ffffff;
+                padding: 30px;
+                border-radius: 10px;
+                box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+            }
 
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-bottom: 20px; /* 아래쪽 마진 추가 */
-        }
+            table {
+                width: 100%;
+                border-collapse: collapse;
+                margin-bottom: 20px;
+            }
 
-        th, td {
-            padding: 12px;
-            text-align: center;
-            border-bottom: 1px solid #ddd;
-        }
+            th, td {
+                padding: 12px;
+                text-align: center;
+                border-bottom: 1px solid #ddd;
+            }
 
-        th {
-            background-color: #f2f2f2;
-        }
+            th {
+                background-color: #f2f2f2;
+            }
 
-        button {
-            background-color: #F2C6D2;
-            color: black;
-            border: none;
-            padding: 12px 20px;
-            font-size: 16px;
-            cursor: pointer;
-            border-radius: 5px;
-            transition: background-color 0.3s;
-        }
+            tr:nth-child(even) {
+                background-color: #f9f9f9;
+            }
 
-        button:hover {
-            background-color: #FAE7ED;
-        }
+            tr:hover {
+                background-color: #f1f1f1;
+            }
 
-        #result {
-            margin-top: 30px;
-        }
+            button {
+                background-color: #F2C6D2;
+                color: black;
+                border: none;
+                padding: 12px 20px;
+                font-size: 16px;
+                cursor: pointer;
+                border-radius: 5px;
+                transition: background-color 0.3s;
+            }
 
-        tr:nth-child(even) {
-            background-color: #f9f9f9;
-        }
+            button:hover {
+                background-color: #FAE7ED;
+            }
 
-        tr:hover {
-            background-color: #f1f1f1;
-        }
+            #result {
+                margin-top: 30px;
+            }
+
+            /* 반응형 스타일 */
+            @media screen and (max-width: 768px) {
+                .main {
+                    width: 90%;
+                    margin: 20px auto;
+                    padding: 20px;
+                }
+
+                table {
+                    font-size: 14px;
+                }
+
+                th, td {
+                    padding: 10px;
+                }
+
+                input {
+                    width: 100%;
+                    padding: 10px;
+                    margin: 10px 0;
+                }
+
+                button {
+                    width: 100%;
+                    margin-top: 10px;
+                    font-size: 14px;
+                }
+            }
+
+            @media screen and (max-width: 480px) {
+                table {
+                    display: block;
+                    overflow-x: auto;
+                }
+
+                th, td {
+                    font-size: 12px;
+                    padding: 8px;
+                }
+
+                .main {
+                    padding: 15px;
+                }
+
+                button {
+                    padding: 10px;
+                }
+            }
+    </style>
+
     </style>
 </head>
 <body>
@@ -102,9 +154,14 @@
                 <td>계좌이체</td>
                 <td id="account_total"></td>
             </tr>
+
             <tr>
                 <th>총액</th>
                 <th id="total_amount"></th>
+            </tr>
+            <tr>
+                <th>부가세</th>
+                <th id="tax"></th>
             </tr>
         </table>
     </div>
@@ -131,6 +188,7 @@
                     $('#cash_total').text(data.cash_total);
                     $('#account_total').text(data.account_total);
                     $('#total_amount').text(data.total_amount);
+                    $('#tax').text(data.card_total * 0.1);
                 },
                 error: function() {
                     alert('금액을 계산하는데 오류가 발생했습니다.');

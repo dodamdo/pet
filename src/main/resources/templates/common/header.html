@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" th:href="@{/css/style.css}" />
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
 
@@ -12,7 +13,8 @@
     <a th:href="@{/calendar}" class="logo-container">
         <img th:src="@{/images/logo.jpg}" alt="Logo" class="logo" />
     </a>
-    <div class="nav-links">
+
+    <div class="nav-links" id="navLinks">
         <a th:href="@{/priceList}">가격표</a>
         <a th:href="@{/pets/petList}">반려동물</a>
         <a th:href="@{/schedule/schList}">예약내역</a>
@@ -20,9 +22,16 @@
         <a th:href="@{/pets/petadd}">신규등록</a>
         <a th:href="@{/schedule/schAdd}">예약</a>
         <a th:href="@{/calendar}" class="right">달력</a>
-        <div>    </div>
     </div>
 </div>
+
+<script>
+    $(document).ready(function() {
+        $('#hamburger').on('click', function() {
+            $('#navLinks').toggleClass('active');
+        });
+    });
+</script>
 
 </body>
 </html>

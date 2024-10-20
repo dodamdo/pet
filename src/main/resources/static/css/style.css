@@ -1,74 +1,67 @@
-/* Global Styles */
-* {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-}
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
 
-body {
-    font-family: Arial, Helvetica, sans-serif;
-}
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+        }
 
-/* Navbar 스타일 */
-.navbar {
-    display: flex;
-    align-items: center; /* 세로 중앙 정렬 */
-    justify-content: space-between; /* 로고와 메뉴 양쪽 배치 */
-    background-color: #FAE7ED;
-    padding: 10px 20px;
-}
+        .navbar {
+            display: flex;
+            flex-wrap: wrap; /* Flex 아이템들이 줄 바꿈 */
+            align-items: center;
+            justify-content: space-between;
+            background-color: #FAE7ED;
+            padding: 10px 20px;
+            position: relative;
+        }
 
-/* Nav 링크 컨테이너 스타일 */
-.nav-links {
-    display: flex;
-    align-items: center;
-    gap: 20px; /* 메뉴 간격 */
-}
+        .logo {
+            height: 80px;
+            width: auto;
+            margin-left: 20px;
+        }
 
-/* Nav 링크 개별 항목 스타일 */
-.nav-links a {
-    display: flex; /* 내부 정렬을 위해 flex 사용 */
-    align-items: center; /* 세로 중앙 정렬 */
-    justify-content: center; /* 가로 중앙 정렬 */
-    font-size: 18px; /* 글씨 크기 */
-    color: #333; /* 텍스트 색상 */
-    text-decoration: none; /* 텍스트 장식 제거 */
-    padding: 10px 15px; /* 여백 */
-    height: 50px; /* 동일한 높이 부여 */
-    border-right: 1px solid #ddd; /* 경계선 추가 */
-}
+        .nav-links {
+            display: flex;
+            flex-wrap: wrap; /* 화면 크기에 따라 줄 바꿈 */
+            gap: 20px;
+            align-items: center;
+            width: 100%; /* 전체 너비 사용 */
+        }
 
-/* 마지막 항목의 경계선 제거 */
-.nav-links a:last-child {
-    border-right: none;
-}
+        .nav-links a {
+            font-size: 18px;
+            color: #333;
+            text-decoration: none;
+            padding: 10px 15px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-right: 1px solid #ddd;
+        }
 
-/* 로고 스타일 */
-.logo {
-    height: 80px; /* 로고 높이 조정 */
-    width: auto;
-    margin-left: 20px;
-}
+        .nav-links a:last-child {
+            border-right: none;
+        }
 
-/* 반응형 스타일 */
-@media screen and (max-width: 700px) {
-    .navbar {
-        flex-direction: column;
-        align-items: center;
-    }
-    .nav-links {
-        flex-direction: column;
-        gap: 10px;
-    }
-    .logo {
-        margin: 10px 0;
-    }
-}
+        @media screen and (max-width: 700px) {
+            .nav-links {
+                flex-direction: column; /* 모바일에서 세로 정렬 */
+                width: 100%; /* 전체 너비 사용 */
+            }
 
-@media screen and (max-width: 400px) {
-    .navbar a {
-        float: none;
-        width: 100%;
-        text-align: center;
-    }
-}
+            .nav-links a {
+                width: 100%; /* 링크를 전체 너비로 설정 */
+                text-align: left;
+                padding: 15px;
+                background-color: #fafafa;
+            }
+
+            .logo {
+                margin: 10px 0;
+            }
+        }

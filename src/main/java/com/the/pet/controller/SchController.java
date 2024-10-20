@@ -13,6 +13,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
+import java.time.YearMonth;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -47,11 +48,13 @@ public class SchController {
 
     }
 
+
     @GetMapping("/schedule/schMonth")
     public String getschMonth(
             @RequestParam int year,
             @RequestParam int month,Model model) {
         LocalDate currentDate = LocalDate.of(year, month, 1);
+
 
         int previousMonth =month-1;
         int nextMonth =month+1;
@@ -94,11 +97,18 @@ public class SchController {
 
 
     @GetMapping("/calendar")
-    public String calender(Model model){
+    public String calender( @RequestParam(required = false) LocalDate schDate,Model model){
+        if (schDate == null) {
+            schDate = LocalDate.now();
+        }
+
+        model.addAttribute("schDate",schDate);
         model.addAttribute("currentYear", LocalDate.now().getYear());
         model.addAttribute("currentMonth", LocalDate.now().getMonthValue() - 1);
         return "calendar";
     }
+
+
 
 
     @GetMapping("/check_sch")
@@ -177,6 +187,12 @@ public class SchController {
         return "schedule/schList";
     }
 
+    @PostMapping("/schedule/schDelete")
+    public String deleteSchedule(@RequestParam Integer schId) {
+        schRepository.deleteById(schId);
+        return "redirect:/schedule/schList";
+    }
+
 
     @GetMapping("/schedule/schAdd")
     public String schAdd( ){
@@ -186,8 +202,9 @@ public class SchController {
     @PostMapping("/schedule/schAdd")
     public String schAddDB(@ModelAttribute  SchEntity schentity) {
         schRepository.save(schentity);
-        return "schedule/schList";
+        return "redirect:/calendar?schDate=" + schentity.getSchDate();
     }
+
 
     @GetMapping("/schedule/petschinfo")
     @ResponseBody

@@ -8,68 +8,68 @@
     <div th:replace="common/header :: header"></div>
     <style>
         .container {
-            display: flex; /* 플렉스 박스를 사용하여 사이드바와 메인 영역을 나란히 배치 */
+            display: flex;
         }
 
         .sidebar {
-            width: 200px; /* 사이드바 너비 */
-            border: 1px solid #ccc; /* 사이드바 테두리 */
-            padding: 10px; /* 패딩 */
-            box-sizing: border-box; /* 패딩을 포함한 너비 계산 */
+            width: 200px;
+            border: 1px solid #ccc;
+            padding: 10px;
+            box-sizing: border-box;
         }
 
         .year {
-            cursor: pointer; /* 클릭 가능하게 보이도록 */
+            cursor: pointer;
             padding: 10px;
-            background-color: #f0f0f0; /* 배경색 */
-            border: 1px solid #ccc; /* 테두리 */
-            margin-bottom: 5px; /* 간격 */
-            transition: background-color 0.3s; /* 부드러운 배경색 전환 */
+            background-color: #f0f0f0;
+            border: 1px solid #ccc;
+            margin-bottom: 5px;
+            transition: background-color 0.3s;
         }
 
         .year:hover {
-            background-color: #e0e0e0; /* 호버 시 배경색 변경 */
+            background-color: #e0e0e0;
         }
 
         .months {
-            display: none; /* 처음에는 숨김 */
-            padding-left: 20px; /* 들여쓰기 */
-            margin-bottom: 10px; /* 연도 간 간격 */
-            border-left: 2px solid #ccc; /* 왼쪽 테두리 */
+            display: none;
+            padding-left: 20px;
+            margin-bottom: 10px;
+            border-left: 2px solid #ccc;
         }
 
         .month {
-            padding: 5px; /* 월 항목 패딩 */
-            cursor: pointer; /* 클릭 가능하게 보이도록 */
+            padding: 5px;
+            cursor: pointer;
         }
 
         .month:hover {
-            background-color: #f9f9f9; /* 호버 시 월 항목 배경색 변경 */
+            background-color: #f9f9f9;
         }
 
         .main {
-            flex-grow: 1; /* 메인 영역이 가능한 공간을 차지하도록 설정 */
-            padding: 10px; /* 패딩 */
+            flex-grow: 1;
+            padding: 10px;
         }
 
         table {
-            width: 100%; /* 테이블 너비 */
-            border-collapse: collapse; /* 테두리 겹침 방지 */
+            width: 100%;
+            border-collapse: collapse;
         }
 
         th, td {
-            border: 1px solid #ccc; /* 테두리 */
-            padding: 8px; /* 패딩 */
-            text-align: left; /* 왼쪽 정렬 */
+            border: 1px solid #ccc;
+            padding: 8px;
+            text-align: left;
         }
 
         th {
-            background-color: #f0f0f0; /* 헤더 배경색 */
+            background-color: #f0f0f0;
         }
 
         a {
-            text-decoration: none; /* 링크 밑줄 제거 */
-            color: #007bff; /* 링크 색상 */
+            text-decoration: none; /
+            color: #007bff;
         }
 
         a:hover {
@@ -170,6 +170,10 @@
             <tr>
                 <th>총액</th>
                 <th th:text="${card_total+cash_total+account_total}"></th>
+            </tr>
+            <tr>
+                <th>부가세</th>
+                <th th:text="${card_total*0.1}"></th>
             </tr>
 
         </table>

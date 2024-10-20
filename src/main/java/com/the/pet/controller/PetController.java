@@ -138,6 +138,24 @@ public class PetController {
         return "pets/petDetail";
     }
 
+    @GetMapping("/slider")
+    public String slider(@RequestParam("petId") Integer petId,Model model){
+        List<String> photoUrls = schService.getPhotoUrlsByPetId(Long.valueOf(petId));
+        if (photoUrls == null || photoUrls.isEmpty()) {
+            photoUrls = List.of("default-pet.jpg");
+        }
+        System.out.println("img list :  ------------"+photoUrls);
+        model.addAttribute("photoUrls",photoUrls);
+        return "slider";
+    }
+
+
+
+
+
+
+
+
     @GetMapping("/pets/petUpdate")
     public String showUpdateForm(@RequestParam("petId") Integer petId, Model model) {
         PetEntity pet = petService.getPetById(petId);
