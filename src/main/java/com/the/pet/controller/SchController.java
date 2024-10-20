@@ -184,7 +184,7 @@ public class SchController {
     @PostMapping("/schedule/schUpdate")
     public String schupdate(@ModelAttribute  SchEntity schentity) {
         schRepository.save(schentity);
-        return "schedule/schList";
+        return "redirect:/schedule/schList";
     }
 
     @PostMapping("/schedule/schDelete")
