@@ -1,0 +1,81 @@
+spring:
+  application:
+    name: pet
+
+  web:
+    resources:
+      static-locations: classpath:static/
+
+  datasource:
+    driver-class-name: oracle.jdbc.driver.OracleDriver
+    url: jdbc:oracle:thin:@(description= (retry_count=20)(retry_delay=3)(address=(protocol=tcps)(port=1521)(host=adb.ap-chuncheon-1.oraclecloud.com))(connect_data=(service_name=g18562d96264970_m3knas9ken8xnb0i_medium.adb.oraclecloud.com))(security=(ssl_server_dn_match=yes)))
+    username: admin
+    password: #비밀번호
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+
+  thymeleaf:
+    cache: false
+
+  mustache:
+    enabled: true
+
+  devtools:
+    restart:
+      enabled: true
+    livereload:
+      enabled: true
+
+  servlet:
+    multipart:
+      max-file-size: 20MB
+      max-request-size: 20MB
+  security:
+    user:
+      name: user
+      password:  #비밀번호
+      roles: USER
+
+server:
+  port: 8080
+  servlet:
+    encoding:
+      force: true
+
+oracle:
+  oci:
+    config:
+      path: /home/ubuntu/.oci/config
+      profile: DEFAULT
+  object-storage:
+    namespace: ax6zqcd108vv
+    bucket-name: dodam
+
+# VM 경로 /home/ubuntu/.oci/config
+# 집 경로 C:/Users/user170509/.oci/config
+
+
+security:
+  user:
+    name: user
+    password: #비밀번호
+    roles: USER
+
+http:
+  basic:
+    enabled: false
+  csrf:
+    enabled: false
+  authorize-requests:
+    - antMatchers:
+        - /login
+        - /priceList
+      permitAll: true
+    - anyRequest:
+        authenticated: true
+  form-login:
+    enabled: true
+  logout:
+    permitAll: true
