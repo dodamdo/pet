@@ -41,6 +41,10 @@ public class PetEntity {
     @Column(name = "pet_notes")
     private String petNotes;
 
+    @Column(name = "is_altered")
+    private String isAltered;
+
+
     public String getPetNotes() {
         return petNotes != null ? petNotes : "없음";
     }

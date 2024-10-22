@@ -45,8 +45,6 @@ dependencies {
 	implementation 'io.jsonwebtoken:jjwt-jackson:0.11.5'
 
 
-	implementation 'jakarta.servlet:jakarta.servlet-api:5.0.0'
-	implementation 'org.json:json:20210307'
 
 	implementation group: 'com.oracle.oci.sdk', name: 'oci-java-sdk-shaded-full', version: '3.10.0'
 }

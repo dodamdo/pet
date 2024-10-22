@@ -30,7 +30,7 @@
         label {
             font-weight: bold;
             margin-top: 10px;
-            display: block;
+            display: inline-block
         }
 
         input[type="text"],
@@ -74,8 +74,18 @@
         <label for="petBreed">품종:</label>
         <input type="text" id="petBreed" name="petBreed" th:field="*{petBreed}">
 
-        <label for="petGender">성별:</label>
-        <input type="text" id="petGender" name="petGender" th:field="*{petGender}">
+        <label>성별:</label>
+        <label>
+            <input type="radio" name="petGender" value="암컷" required> 암컷
+        </label>
+        <label>
+            <input type="radio" name="petGender" value="수컷"> 수컷
+        </label>
+        <label>
+            <input type="radio" name="petGender" value="모름"> 모름
+        </label>
+        <br>
+
 
         <label for="petAge">나이:</label>
         <input type="text" id="petAge" name="petAge" th:field="*{petAge}">
@@ -83,6 +93,17 @@
         <label for="petWeight">몸무게:</label>
         <input type="text" id="petWeight" name="petWeight" th:field="*{petWeight}">
 
+        <label >중성화 여부:</label>
+        <label>
+            <input type="radio" id="alteredO" name="isAltered" value="O" required> O
+        </label>
+        <label>
+            <input type="radio" id="alteredX" name="isAltered" value="X"> X
+        </label>
+        <label>
+            <input type="radio" id="alteredUnknown" name="isAltered" value="모름"> 모름
+        </label>
+        <br>
 
 
         <input type="hidden" id="shopId" name="shopId" value="1" th:field="*{shopId}">

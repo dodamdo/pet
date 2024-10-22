@@ -58,6 +58,11 @@
         td {
             vertical-align: top;
         }
+        .infotitle {
+            font-weight: bold;
+            font-size: 17px;
+        }
+
 
         .update-button {
             display: inline-block;
@@ -199,6 +204,7 @@
 <body>
 <div th:replace="common/header :: header"></div>
 <div class="main">
+    <br>
     <h1 th:text="${pet.petName} + '의 세부 정보'"></h1>
     <a th:href="@{/pets/petUpdate(petId=${pet.petId})}" class="update-button">정보수정</a>
 
@@ -218,28 +224,32 @@
         <tr>
         </tr>
         <tr>
-            <td>품종</td>
+            <td class="infotitle">품종</td>
             <td th:text="${pet.petBreed}">품종</td>
-        </tr>
-        <tr>
-            <td>성별</td>
+            <td class="infotitle">성별</td>
             <td th:text="${pet.petGender}">성별</td>
         </tr>
         <tr>
-            <td>나이</td>
+            <td class="infotitle">나이</td>
             <td th:text="${pet.petAge}">나이</td>
-        </tr>
-        <tr>
-            <td>무게</td>
+            <td class="infotitle">무게</td>
             <td th:text="${pet.petWeight}">몸무게</td>
         </tr>
         <tr>
-            <td>연락처</td>
+            <td class="infotitle">연락처</td>
             <td th:text="${pet.formattedOwnerId}"></td>
+            <td class="infotitle">중성화</td>
+            <td th:text="${pet.isAltered}"></td>
         </tr>
         <tr>
-            <td>메모</td>
+            <td class="infotitle">메모</td>
             <td th:text="${pet.petNotes}">메모</td>
+        </tr>
+        <tr>
+            <td class="infotitle">노쇼</td>
+            <td th:text="${noshowcount}회"></td>
+            <td class="infotitle">당일취소</td>
+            <td th:text="${cancelcount}회"></td>
         </tr>
     </table>
 

@@ -33,16 +33,17 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .cors() // CORS 활성화
-                .and()
-                .csrf().disable() // CSRF 보호 비활성화
-                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS) // 세션 사용 안 함 (JWT 기반)
-                .and()
+                .csrf().disable() // CSRF 비활성화
                 .authorizeHttpRequests(authz -> authz
-                        .requestMatchers("/login", "/priceList", "/flutterLogin","selectAll").permitAll() // 특정 URL에 대한 접근 허용
-                        .requestMatchers(HttpMethod.POST, "/flutterLogin").permitAll() // flutterLogin에 대한 POST 요청 허용
+                        .requestMatchers("/login", "/priceList", "/flutterLogin", "/selectAll").permitAll()
                         .anyRequest().authenticated() // 그 외 요청은 인증 필요
-                );
+                )
+                .formLogin(form -> form
+                        .loginPage("/login") // 커스텀 로그인 페이지 경로
+                        .defaultSuccessUrl("/priceList", true) // 로그인 성공 시 이동할 페이지
+                        .permitAll()
+                )
+                .logout(logout -> logout.permitAll());
 
         return http.build();
     }

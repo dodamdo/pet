@@ -47,6 +47,10 @@
         input[type="submit"]:hover {
             background-color: #0056b3;
         }
+        .inline-label {
+            display: inline-block;
+            margin-right: 15px;
+        }
     </style>
 </head>
 <body>
@@ -67,8 +71,16 @@
         <label for="petBreed">품종:</label>
         <input type="text" id="petBreed" name="petBreed" th:field="*{petBreed}" />
 
-        <label for="petGender">성별:</label>
-        <input type="text" id="petGender" name="petGender" th:field="*{petGender}" />
+        <label>성별:</label>
+        <label class="inline-label">
+            <input type="radio" name="petGender" value="암컷" th:checked="*{petGender == '암컷'}" /> 암컷
+        </label>
+        <label class="inline-label">
+            <input type="radio" name="petGender" value="수컷" th:checked="*{petGender == '수컷'}" /> 수컷
+        </label>
+        <label class="inline-label">
+            <input type="radio" name="petGender" value="모름" th:checked="*{petGender == '모름'}" /> 모름
+        </label>
 
         <label for="petAge">나이:</label>
         <input type="text" id="petAge" name="petAge" th:field="*{petAge}" />
@@ -79,6 +91,17 @@
         <label for="petNotes">메모:</label>
         <input type="text" id="petNotes" name="petNotes" th:field="*{petNotes}" />
 
+        <label>중성화 여부:</label>
+        <label class="inline-label">
+            <input type="radio" name="isAltered" value="O" th:checked="*{isAltered == 'O'}" required /> O
+        </label>
+        <label class="inline-label">
+            <input type="radio" name="isAltered" value="X" th:checked="*{isAltered == 'X'}" /> X
+        </label>
+        <label class="inline-label">
+            <input type="radio" name="isAltered" value="모름" th:checked="*{isAltered == '모름'}" /> 모름
+        </label>
+        <br>
         <input type="submit" value="수정하기" />
     </form>
 </div>

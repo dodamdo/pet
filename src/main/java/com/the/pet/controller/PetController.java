@@ -2,6 +2,7 @@ package com.the.pet.controller;
 
 import com.the.pet.model.entity.PetEntity;
 import com.the.pet.model.entity.SchEntity;
+import com.the.pet.repository.NoShowRepository;
 import com.the.pet.repository.PetRepository;
 import com.the.pet.repository.SchRepository;
 import com.the.pet.service.ObjectStorageService;
@@ -36,7 +37,8 @@ public class PetController {
     private PetRepository petRepository;
     @Autowired
     private SchService schService;
-
+    @Autowired
+    private NoShowRepository noshowRepository;
 
     @GetMapping("/pets/petList")
     public String getAllPets( Model model,@PageableDefault(size = 10) Pageable pageable) {
@@ -127,6 +129,8 @@ public class PetController {
             sch.setPetName(petName);
             sch.setOwnerId(ownerId);
         }
+
+        ///////////////////////////사진
         List<String> photoUrls = schService.getPhotoUrlsByPetId(Long.valueOf(petId));
         if (photoUrls == null || photoUrls.isEmpty()) {
             photoUrls = List.of("default-pet.jpg");
@@ -135,6 +139,14 @@ public class PetController {
 
         model.addAttribute("petsch",schList);
         model.addAttribute("photoUrls",photoUrls);
+
+
+        /////////////////////////////노쇼 당일취소
+        model.addAttribute("noshowcount",noshowRepository.countNoShow(petId));
+        model.addAttribute("cancelcount",noshowRepository.countCancel(petId));
+
+
+
         return "pets/petDetail";
     }
 
