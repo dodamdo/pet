@@ -21,6 +21,7 @@ public class RestPetController
 
     @GetMapping("/selectAll")
     public ResponseEntity<List<PetEntity>> selectAll(){
+        System.out.println("selectAll -----------------------");
         List<PetEntity> dtos= petRepository.findAll();
         if(dtos==null){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
