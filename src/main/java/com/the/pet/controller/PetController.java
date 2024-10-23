@@ -1,5 +1,6 @@
 package com.the.pet.controller;
 
+import com.the.pet.model.entity.NoShowEntity;
 import com.the.pet.model.entity.PetEntity;
 import com.the.pet.model.entity.SchEntity;
 import com.the.pet.repository.NoShowRepository;
@@ -8,6 +9,7 @@ import com.the.pet.repository.SchRepository;
 import com.the.pet.service.ObjectStorageService;
 import com.the.pet.service.PetService;
 import com.the.pet.service.SchService;
+import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -15,12 +17,16 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.nio.file.Paths;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -110,7 +116,7 @@ public class PetController {
 
 
     @GetMapping("/pets/petDetail")
-    public String petDetail(@RequestParam("petId") Integer petId, Model model) {
+    public String petDetail(@RequestParam("petId") Long petId, Model model) {
         PetEntity pet = petService.getPetById(petId);
         if(pet.getOwnerId().toString().length()==8){
             String formattedOwnerId = "010-" + pet.getOwnerId().toString().substring(0, 4) + "-" + pet.getOwnerId().toString().substring(4);
@@ -119,7 +125,7 @@ public class PetController {
         model.addAttribute("pet", pet);
 
 
-        List<SchEntity> schList = schRepository.findByPetIdOrderBySchDateDesc(petId);
+        List<SchEntity> schList = schRepository.findByPetIdOrderBySchDateDesc(Math.toIntExact(petId));
         for (SchEntity sch : schList) {
             String petName=petRepository.findPetNameById(sch.getPetId());
             String ownerId=petRepository.findOwnerIdById(sch.getPetId());
@@ -144,7 +150,8 @@ public class PetController {
         /////////////////////////////노쇼 당일취소
         model.addAttribute("noshowcount",noshowRepository.countNoShow(petId));
         model.addAttribute("cancelcount",noshowRepository.countCancel(petId));
-
+        model.addAttribute("noshowlist",noshowRepository.findNoShowList(petId));
+        model.addAttribute("cancellist",noshowRepository.findCancelList(petId));
 
 
         return "pets/petDetail";
@@ -169,7 +176,7 @@ public class PetController {
 
 
     @GetMapping("/pets/petUpdate")
-    public String showUpdateForm(@RequestParam("petId") Integer petId, Model model) {
+    public String showUpdateForm(@RequestParam("petId") Long petId, Model model) {
         PetEntity pet = petService.getPetById(petId);
         model.addAttribute("pet",pet );
         return "pets/petUpdate";
@@ -226,6 +233,34 @@ public class PetController {
             model.addAttribute("message", "파일 업로드 실패: " + e.getMessage());
         }
         return "redirect:/pets/petDetail?petId="+petId;
+    }
+
+
+    @PostMapping("/noshow/add")
+    public String addNoShow(@RequestParam Long petId,
+                            @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Date noshowCancelDate,
+                            @RequestParam String noshowCancelInfo) {
+        // 새로운 NoShowEntity 생성
+        NoShowEntity noShowEntity = new NoShowEntity();
+        noShowEntity.setPetId(petId);
+        noShowEntity.setNoshowCancelDate(noshowCancelDate);
+        noShowEntity.setNoshowCancelInfo(noshowCancelInfo);
+
+        // 데이터베이스에 엔티티 저장
+        noshowRepository.save(noShowEntity);
+
+        // 리다이렉트 처리
+        return "redirect:/pets/petDetail?petId=" + petId;
+    }
+
+
+    @Transactional
+    @PostMapping("/noshow/delete")
+    public String deleteNoshow(@RequestParam Long noshowId, @RequestParam Long petId) {
+        System.out.println("noshowId: " + noshowId + "    petId: " + petId);
+        noshowRepository.deleteNoshow(noshowId);
+        System.out.println("Deleted noshowId: " + noshowId + "    petId: " + petId);
+        return "redirect:/pets/petDetail?petId=" + petId;
     }
 
 

@@ -33,4 +33,9 @@ public interface SchRepository extends JpaRepository<SchEntity,Integer>{
 
     @Query("SELECT s.photoUrl FROM SchEntity s WHERE s.petId = :petId AND s.photoUrl IS NOT NULL")
     List<String> findPhotoUrlsByPetId(@Param("petId") Long petId);
+
+
+    @Query("SELECT s FROM SchEntity s WHERE s.petId = :petId ORDER BY s.schDate DESC")
+    List<SchEntity> findLastGroomingByPetId(@Param("petId") Long petId);
+
 }

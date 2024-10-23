@@ -1,6 +1,7 @@
 package com.the.pet.controller.rest;
 
 import com.the.pet.model.entity.PetEntity;
+import com.the.pet.model.request.PetInfoDto;
 import com.the.pet.repository.PetRepository;
 import com.the.pet.service.PetService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,14 +20,13 @@ public class RestPetController
     @Autowired
     private  PetRepository petRepository;
 
+
     @GetMapping("/selectAll")
-    public ResponseEntity<List<PetEntity>> selectAll(){
+    public ResponseEntity<List<PetInfoDto>> selectAll(){
         System.out.println("selectAll -----------------------");
-        List<PetEntity> dtos= petRepository.findAll();
-        if(dtos==null){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-        }
-        return ResponseEntity.status(HttpStatus.OK).body(dtos);
+        List<PetInfoDto> petDetails = petService.getAllPetDetails();
+        return ResponseEntity.ok(petDetails);
+
     }
 
 

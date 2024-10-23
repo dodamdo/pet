@@ -61,6 +61,7 @@
         .infotitle {
             font-weight: bold;
             font-size: 17px;
+            background-color: #FADADD;
         }
 
 
@@ -87,7 +88,7 @@
         .modal {
             display: none;
             position: fixed;
-            z-index: 1;
+            z-index: 11;
             left: 0;
             top: 0;
             width: 100%;
@@ -243,13 +244,13 @@
         </tr>
         <tr>
             <td class="infotitle">메모</td>
-            <td th:text="${pet.petNotes}">메모</td>
+            <td th:text="${pet.petNotes}" colspan="3">메모</td>
         </tr>
-        <tr>
+        <tr class = "noshow-row">
             <td class="infotitle">노쇼</td>
-            <td th:text="${noshowcount}회"></td>
+            <td th:text="${noshowcount+'회'}"></td>
             <td class="infotitle">당일취소</td>
-            <td th:text="${cancelcount}회"></td>
+            <td th:text="${cancelcount+'회'}"></td>
         </tr>
     </table>
 
@@ -322,6 +323,71 @@
     <img id="largeImage" class="large-image" src="" alt="큰 이미지" />
 </div>
 
+
+
+<div id="noshowModal" class="modal">
+    <div class="modal-content">
+        <span class="close" id="closeNoshowModal">&times;</span>
+
+        <form action="/noshow/add" method="post">
+            <input type="hidden" name="petId" th:value="${pet.petId}" />
+            <input type="date" name="noshowCancelDate" required /><br>
+
+            <label>
+                <input type="radio" name="noshowCancelInfo" value="노쇼" required /> 노쇼
+            </label>
+            <label>
+                <input type="radio" name="noshowCancelInfo" value="당일취소" required /> 당일취소
+            </label>
+
+            <button type="submit">등록</button>
+        </form>
+        <h2>노쇼</h2>
+        <table>
+            <thead>
+            <tr>
+                <th colspan="2">날짜</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="sch : ${noshowlist}">
+                <td th:text="${#dates.format(sch.noshowCancelDate, 'yyyy-MM-dd')}"></td>
+                <td>
+                    <form action="/noshow/delete" method="post" class="deleteForm">
+                        <input type="hidden" name="noshowId" th:value="${sch.noshowId}" readonly/>
+                        <input type="hidden" name="petId" th:value="${sch.petId}" readonly/>
+                        <button type="submit">삭제</button>
+                    </form>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+
+        <h2>당일취소</h2>
+        <table>
+            <thead>
+            <tr>
+                <th colspan="2">날짜</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="sch : ${cancellist}">
+                <td th:text="${#dates.format(sch.noshowCancelDate, 'yyyy-MM-dd')}"></td>
+                <td>
+                    <form action="/noshow/delete" method="post" class="deleteForm">
+                        <input type="hidden" name="noshowId" th:value="${sch.noshowId}" readonly/>
+                        <input type="hidden" name="petId" th:value="${sch.petId}" readonly/>
+                        <button type="submit">삭제</button>
+                    </form>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         const openModalButtons = document.querySelectorAll('.openModalButton');
@@ -392,9 +458,9 @@
             currentSlide += direction;
 
             if (currentSlide < 0) {
-                currentSlide = totalSlides - 1; // 마지막 슬라이드로 이동
+                currentSlide = totalSlides - 1;
             } else if (currentSlide >= totalSlides) {
-                currentSlide = 0; // 첫 번째 슬라이드로 이동
+                currentSlide = 0;
             }
 
             const sliderContainer = document.querySelector('.slider-container');
@@ -416,6 +482,25 @@
         document.querySelector('.next').addEventListener('click', function () {
             changeSlide(1);
         });
+
+
+
+        const noshowRow = document.querySelector('.noshow-row');
+        noshowRow.addEventListener('click', function () {
+            document.getElementById('noshowModal').style.display = 'block';
+        });
+
+
+        const closeNoshowModal = document.getElementById('closeNoshowModal');
+        closeNoshowModal.addEventListener('click', function () {
+            document.getElementById('noshowModal').style.display = 'none';
+        });
+
+
+
+
+
+
     });
 </script>
 </body>
