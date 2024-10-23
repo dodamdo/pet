@@ -94,7 +94,21 @@
 
             <label for="schDate">날짜:</label>
             <input type="date" id="schDate" name="schDate" th:value="${schedule.schDate}" required><br>
+            <div style="display: flex; gap: 10px;">
+                <select id="hourSelect">
+                    <option value="">--시 선택--</option>
+                    <script>
+                        for (let i = 9; i <= 20; i++) {
+                            document.write(`<option value="${i}">${i}시</option>`);
+                        }
+                    </script>
+                </select>
 
+                <select id="minuteSelect">
+                    <option value="00">00분</option>
+                    <option value="30">30분</option>
+                </select>
+            </div>
             <label for="schTime">시간:</label>
             <input type="text" id="schTime" name="schTime" th:field="*{schTime}" required><br>
 
@@ -120,6 +134,20 @@
     </div>
 
     <script>
+        $(document).ready(function () {
+            // 시간 및 분 선택 시 값 설정
+            $('#hourSelect, #minuteSelect').on('change', function () {
+                const hour = $('#hourSelect').val();
+                const minute = $('#minuteSelect').val() || '00'; // 기본 00분
+
+                if (hour) {
+                    $('#schTime').val(`${hour}:${minute}`);
+                } else {
+                    $('#schTime').val('');
+                }
+            });
+        }
+
         function deleteSchedule() {
             if (confirm('정말 삭제하시겠습니까?')) {
                 const form = document.getElementById('scheduleForm');

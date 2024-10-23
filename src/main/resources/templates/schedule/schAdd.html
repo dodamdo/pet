@@ -156,8 +156,24 @@
             <label for="schDate">날짜:</label>
             <input type="date" id="schDate" name="schDate" required>
 
+            <div style="display: flex; gap: 10px;">
+                <select id="hourSelect">
+                    <option value="">--시 선택--</option>
+                    <script>
+                        for (let i = 9; i <= 20; i++) {
+                            document.write(`<option value="${i}">${i}시</option>`);
+                        }
+                    </script>
+                </select>
+
+                <select id="minuteSelect">
+                    <option value="00">00분</option>
+                    <option value="30">30분</option>
+                </select>
+            </div>
+
             <label for="schTime">시간:</label>
-            <input type="text" id="schTime" name="schTime" required />
+            <input type="text" id="schTime" name="schTime" required readonly />
 
             <label for="groomingStyle">미용 스타일:</label>
             <input type="text" id="groomingStyle" name="groomingStyle" required>
@@ -183,6 +199,22 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
     $(document).ready(function() {
+
+        $('#hourSelect, #minuteSelect').on('change', function () {
+            const hour = $('#hourSelect').val();
+            const minute = $('#minuteSelect').val() || '00'; // 기본 00분
+
+            if (hour) {
+                $('#schTime').val(`${hour}:${minute}`);
+            } else {
+                $('#schTime').val('');
+            }
+        });
+
+
+
+
+
         $('#petSearch').on('input', function() {
             const searchValue = $(this).val();
             if (searchValue.length >= 2) {
