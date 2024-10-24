@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <title>Owner List</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}" />
+</head>
+<body>
+<div th:replace="common/header :: header"></div>
+<div class="main">
+    <form action="ownerAdd" method="post">
+        <input type="text" name="petId" th:value="${petId}" readonly>
+        <input type="text" name="ownerId" required>
+        <button type="submit"> 등록</button>
+    </form>
+</div>
+</body>
+</html>

@@ -134,19 +134,44 @@
     </div>
 
     <script>
-        $(document).ready(function () {
-            // 시간 및 분 선택 시 값 설정
-            $('#hourSelect, #minuteSelect').on('change', function () {
-                const hour = $('#hourSelect').val();
-                const minute = $('#minuteSelect').val() || '00'; // 기본 00분
-
-                if (hour) {
-                    $('#schTime').val(`${hour}:${minute}`);
-                } else {
-                    $('#schTime').val('');
-                }
-            });
+        const existingTime = document.getElementById('schTime').value;
+        let existingHour = "";
+        let existingMinute = "";
+        if (existingTime) {
+            const timeParts = existingTime.split(':');
+            existingHour = timeParts[0];  // 시간 부분
+            existingMinute = timeParts[1];  // 분 부분
         }
+        const hourSelect = document.getElementById('hourSelect');
+        for (let i = 9; i <= 20; i++) {
+            const option = document.createElement('option');
+            option.value = i;
+            option.textContent = `${i}시`;
+                if (i == existingHour) {
+                option.selected = true;
+            }
+            hourSelect.appendChild(option);
+        }
+
+        const minuteSelect = document.getElementById('minuteSelect');
+        if (existingMinute) {
+            minuteSelect.value = existingMinute; // 기존 분 값 반영
+        }
+
+
+        document.getElementById('hourSelect').addEventListener('change', updateScheduleTime);
+        document.getElementById('minuteSelect').addEventListener('change', updateScheduleTime);
+
+        function updateScheduleTime() {
+            const hour = document.getElementById('hourSelect').value;
+            const minute = document.getElementById('minuteSelect').value || '00'; // 기본 00분
+            if (hour) {
+                document.getElementById('schTime').value = `${hour}:${minute}`;
+            } else {
+                document.getElementById('schTime').value = '';
+            }
+        }
+
 
         function deleteSchedule() {
             if (confirm('정말 삭제하시겠습니까?')) {

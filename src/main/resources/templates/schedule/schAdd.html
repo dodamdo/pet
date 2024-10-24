@@ -201,7 +201,7 @@
     $(document).ready(function() {
 
         $('#hourSelect, #minuteSelect').on('change', function () {
-            const hour = $('#hourSelect').val();
+            const hour = $('#hourSelect').val() || '10';
             const minute = $('#minuteSelect').val() || '00'; // 기본 00분
 
             if (hour) {

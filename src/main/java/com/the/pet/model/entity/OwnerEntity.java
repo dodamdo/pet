@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
-@Table(name = "owner")
+@Table(name = "extraowner")
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
@@ -15,25 +15,35 @@ public class OwnerEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "owner_id")
-    private Long ownerId;
+    @Column(name = "extraowner_id ", nullable = false)
+    private Long extraownerId ;
 
-    @Column(name = "shop_id")
-    private Long shopId;
+    @Column(name = "pet_id" , nullable = false)
+    private Long petId;
 
-    @Column(name = "main_owner_phone", nullable = false, length = 100)
-    private String mainOwnerPhone;
+    @Column(name = "pet_name" , nullable = false)
+    private String petName;
 
-    @Column(name = "main_owner_name", nullable = false, length = 100)
-    private String mainOwnerName;
-
-    @Column(name = "main_owner_notes", length = 255)
-    private String mainOwnerNotes ; // 기본값 설정
+    @Column(name = "owner_id " , nullable = false)
+    private Long ownerId ;
 
 
+    @Transient
+    private String formattedOwnerId;
 
+    @PostLoad
+    private void updateFormattedOwnerId() {
+        this.formattedOwnerId = formatOwnerId(this.ownerId);
+    }
 
-    public String getMainOwnerNotes() {
-        return mainOwnerNotes != null ? mainOwnerNotes : "없음";
+    private String formatOwnerId(Long ownerId) {
+        if (ownerId == null) {
+            return null;
+        }
+        String ownerIdStr = String.valueOf(ownerId);
+        while (ownerIdStr.length() < 8) {
+            ownerIdStr = "0" + ownerIdStr;
+        }
+        return "010-" + ownerIdStr.substring(0, 4) + "-" + ownerIdStr.substring(4);
     }
 }

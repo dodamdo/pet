@@ -253,7 +253,24 @@
             <td th:text="${cancelcount+'회'}"></td>
         </tr>
     </table>
+    <table th:if="${owners}" >
+        <tr>
+            <th>Extra Owner ID</th>
+            <th>Pet ID</th>
+            <th>Pet Name</th>
+            <th>Owner ID</th>
+            <th>Formatted Owner ID</th>
+        </tr>
+        <tr th:each="owner : ${owners}">
+            <td th:text="${owner.extraownerId}"></td>
+            <td th:text="${owner.petId}"></td>
+            <td th:text="${owner.petName}"></td>
+            <td th:text="${owner.ownerId}"></td>
+            <td th:text="${owner.formattedOwnerId}"></td>
+        </tr>
+    </table>
 
+    <a th:href="@{/owners/ownerAdd(petId=${pet.petId})}" >번호추가</a>
     <h1>전체 예약</h1>
     <table class="schedule">
         <thead>

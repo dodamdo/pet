@@ -1,9 +1,11 @@
 package com.the.pet.controller;
 
 import com.the.pet.model.entity.NoShowEntity;
+import com.the.pet.model.entity.OwnerEntity;
 import com.the.pet.model.entity.PetEntity;
 import com.the.pet.model.entity.SchEntity;
 import com.the.pet.repository.NoShowRepository;
+import com.the.pet.repository.OwnerRepository;
 import com.the.pet.repository.PetRepository;
 import com.the.pet.repository.SchRepository;
 import com.the.pet.service.ObjectStorageService;
@@ -45,6 +47,10 @@ public class PetController {
     private SchService schService;
     @Autowired
     private NoShowRepository noshowRepository;
+    @Autowired
+    private OwnerRepository ownerRepository;
+
+
 
     @GetMapping("/pets/petList")
     public String getAllPets( Model model,@PageableDefault(size = 10) Pageable pageable) {
@@ -76,13 +82,16 @@ public class PetController {
 
         pageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), Sort.by("petId").descending());
         Page<PetEntity> pets;
+        List<OwnerEntity> owners;
         boolean isNumeric = search != null && search.matches("\\d+"); // 숫자열 확인
         if (isNumeric) {
             model.addAttribute("searchtype", "전화번호 검색");
             pets = petRepository.findByOwnerIdLike(search, pageable);
+            owners= ownerRepository.findByOwnerId(search);
         } else {
             model.addAttribute("searchtype", "애완동물 이름 검색");
             pets = petRepository.findByPetNameContainingIgnoreCase(search, pageable); // 펫 이름으로 검색
+            owners= ownerRepository.findByPetName(search);
         }
 
         for(PetEntity pet : pets){
@@ -91,8 +100,8 @@ public class PetController {
                 pet.setFormattedOwnerId(formattedOwnerId);
             }
         }
-
         model.addAttribute("pets", pets);
+        model.addAttribute("owners", owners);
         model.addAttribute("currentPage", pets.getNumber() + 1);
         model.addAttribute("totalPages", pets.getTotalPages());
         model.addAttribute("prevPage", pets.hasPrevious() ? pets.getNumber() - 1 : null);
@@ -102,6 +111,7 @@ public class PetController {
 
         return "pets/petSearch";
     }
+
     @GetMapping("/pets/petadd")
     public String petadd(Model model) {
         model.addAttribute("pet", new PetEntity());
@@ -152,6 +162,12 @@ public class PetController {
         model.addAttribute("cancelcount",noshowRepository.countCancel(petId));
         model.addAttribute("noshowlist",noshowRepository.findNoShowList(petId));
         model.addAttribute("cancellist",noshowRepository.findCancelList(petId));
+
+        /////////////////////////////추가연락처
+        List<OwnerEntity> owners =ownerRepository.findByPetId(petId);
+        model.addAttribute("owners",owners);
+
+
 
 
         return "pets/petDetail";

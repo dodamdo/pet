@@ -116,8 +116,8 @@
             <th>품종</th>
             <th>성별</th>
             <th>나이</th>
-            <th>체중</th>
-            <th>소유자 ID</th>
+            <th>몸무게</th>
+            <th>연락처</th>
             <th>메모</th>
         </tr>
         </thead>
@@ -148,6 +148,20 @@
         </div>
     </div>
 
+    <table>
+        <thead>
+        <tr>
+            <th>이름</th>
+            <th>연락처</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="owner : ${owners}" th:onclick="'location.href=\'/pets/petDetail?petId=' + ${owner.petId} + '\''" style="cursor: pointer;">
+            <td th:text="${owner.petName}"></td>
+            <td th:text="${owner.formattedOwnerId}"></td>
+        </tr>
+        </tbody>
+    </table>
 
 </div>
 
