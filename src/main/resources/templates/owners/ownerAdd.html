@@ -3,15 +3,101 @@
 <head>
     <title>Owner List</title>
     <link rel="stylesheet" th:href="@{/css/style.css}" />
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .main {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #f8f8f8;
+        }
+
+        tr:hover {
+            background-color: #f1f1f1;
+        }
+
+        button {
+            background-color: #e74c3c;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #c0392b;
+        }
+
+        .form-container {
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .form-container input {
+            padding: 8px;
+            margin: 5px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+    </style>
 </head>
 <body>
 <div th:replace="common/header :: header"></div>
-<div class="main">
-    <form action="ownerAdd" method="post">
-        <input type="text" name="petId" th:value="${petId}" readonly>
-        <input type="text" name="ownerId" required>
-        <button type="submit"> 등록</button>
-    </form>
+<div class="extra-owner">
+    <h1>연락처 목록</h1>
+    <div class="form-container">
+        <form action="ownerAdd" method="post">
+            <input type="hidden" name="petId" th:value="${petId}" readonly>
+            <input type="text" name="ownerId" required placeholder="연락처 입력">
+            <button type="submit">추가</button>
+        </form>
+    </div>
+
+    <table>
+        <tr>
+            <th>연락처</th>
+            <th>삭제</th>
+        </tr>
+        <tr th:each="owner : ${owners}">
+            <td th:text="${owner.formattedOwnerId}"></td>
+            <td>
+                <form th:action="@{/deleteOwner}" method="post">
+                    <input type="hidden" name="extraownerId" th:value="${owner.extraownerId}" /> <!-- hidden input -->
+                    <input type="hidden" name="petId" th:value="${owner.petId}" /> <!-- hidden input -->
+                    <button type="submit">삭제</button>
+                </form>
+            </td>
+        </tr>
+    </table>
 </div>
 </body>
 </html>

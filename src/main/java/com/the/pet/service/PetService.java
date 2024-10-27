@@ -47,6 +47,7 @@ public class PetService {
         return new PetInfoDto(
                 pet.getPetId(),
                 pet.getPetName(),
+                pet.getPetBreed(),
                 pet.getOwnerId(),
                 lastGrooming.getSchDate(),
                 lastGrooming.getGroomingStyle(),
@@ -67,6 +68,7 @@ public class PetService {
             PetInfoDto dto = new PetInfoDto(
                     pet.getPetId(),
                     pet.getPetName(),
+                    pet.getPetBreed(),
                     pet.getOwnerId(),
                     lastGrooming != null ? lastGrooming.getSchDate() : null,  // 최근 미용 날짜
                     lastGrooming != null ? lastGrooming.getGroomingStyle() : null,  // 미용 스타일

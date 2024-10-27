@@ -168,8 +168,6 @@ public class PetController {
         model.addAttribute("owners",owners);
 
 
-
-
         return "pets/petDetail";
     }
 
@@ -183,13 +181,6 @@ public class PetController {
         model.addAttribute("photoUrls",photoUrls);
         return "slider";
     }
-
-
-
-
-
-
-
 
     @GetMapping("/pets/petUpdate")
     public String showUpdateForm(@RequestParam("petId") Long petId, Model model) {
@@ -277,6 +268,12 @@ public class PetController {
         noshowRepository.deleteNoshow(noshowId);
         System.out.println("Deleted noshowId: " + noshowId + "    petId: " + petId);
         return "redirect:/pets/petDetail?petId=" + petId;
+    }
+    @Transactional
+    @PostMapping("/pets/ownerAdd")
+    public String ownerAddDB(@ModelAttribute OwnerEntity owner, Model model) {
+        ownerRepository.save(owner);
+        return "redirect:/pets/petDetail?petId="+owner.getPetId();
     }
 
 

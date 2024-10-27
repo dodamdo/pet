@@ -242,6 +242,17 @@
             <td class="infotitle">중성화</td>
             <td th:text="${pet.isAltered}"></td>
         </tr>
+        <tr th:if="${owners}">
+            <td class="infotitle">추가 연락처</td>
+            <td colspan="2">
+                <ul>
+                    <li th:each="owner : ${owners}" th:text="${owner.formattedOwnerId}"></li>
+                </ul>
+            </td>
+            <td>
+                <button class="openOwnerModalButton">연락처 관리</button>
+            </td>
+        </tr>
         <tr>
             <td class="infotitle">메모</td>
             <td th:text="${pet.petNotes}" colspan="3">메모</td>
@@ -253,24 +264,8 @@
             <td th:text="${cancelcount+'회'}"></td>
         </tr>
     </table>
-    <table th:if="${owners}" >
-        <tr>
-            <th>Extra Owner ID</th>
-            <th>Pet ID</th>
-            <th>Pet Name</th>
-            <th>Owner ID</th>
-            <th>Formatted Owner ID</th>
-        </tr>
-        <tr th:each="owner : ${owners}">
-            <td th:text="${owner.extraownerId}"></td>
-            <td th:text="${owner.petId}"></td>
-            <td th:text="${owner.petName}"></td>
-            <td th:text="${owner.ownerId}"></td>
-            <td th:text="${owner.formattedOwnerId}"></td>
-        </tr>
-    </table>
 
-    <a th:href="@{/owners/ownerAdd(petId=${pet.petId})}" >번호추가</a>
+
     <h1>전체 예약</h1>
     <table class="schedule">
         <thead>
@@ -403,6 +398,48 @@
     </div>
 </div>
 
+<!-- 연락처 관리 모달 -->
+<div id="ownerModal" class="modal">
+    <div class="modal-content">
+        <span class="close" id="closeOwnerModal">&times;</span>
+        <h2>연락처 목록</h2>
+        <div class="form-container">
+            <form action="ownerAdd" method="post">
+                <input type="hidden" name="petId" th:value="${pet.petId}" readonly>
+                <input type="hidden" name="petName" th:value="${pet.petName}" readonly>
+                <input type="text" name="ownerId" required placeholder="연락처 입력">
+                <button type="submit">추가</button>
+            </form>
+        </div>
+        <table>
+            <tr>
+                <th>연락처</th>
+                <th>삭제</th>
+            </tr>
+            <tr th:each="owner : ${owners}">
+                <td th:text="${owner.formattedOwnerId}"></td>
+                <td>
+                    <form th:action="@{/deleteOwner}" method="post">
+                        <input type="hidden" name="extraownerId" th:value="${owner.extraownerId}" />
+                        <input type="hidden" name="petId" th:value="${owner.petId}" />
+                        <button type="submit">삭제</button>
+                    </form>
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
 
 
 <script>
@@ -513,8 +550,22 @@
             document.getElementById('noshowModal').style.display = 'none';
         });
 
+        //연락처 모달 열고닫기
+        document.querySelectorAll('.openOwnerModalButton').forEach(button => {
+            button.addEventListener('click', function () {
+                document.getElementById('ownerModal').style.display = 'block';
+            });
+        });
 
+        document.getElementById('closeOwnerModal').addEventListener('click', function () {
+            document.getElementById('ownerModal').style.display = 'none';
+        });
 
+        window.addEventListener('click', function(event) {
+            if (event.target == document.getElementById('ownerModal')) {
+                document.getElementById('ownerModal').style.display = 'none';
+            }
+        });
 
 
 

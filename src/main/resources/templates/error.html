@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <title>오류 발생</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}" />
+    <style>
+        .container {
+            text-align: center;
+            margin: 100px auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            max-width: 600px;
+        }
+
+        h1 {
+            color: #ff0000; /* 빨간색 */
+        }
+
+        p {
+            font-size: 18px;
+        }
+
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>오류 발생</h1>
+    <p th:text="${errorMessage}">문제가 발생했습니다. 다시 시도해주세요.</p>
+    <a th:href="@{/calendar}">돌아가기</a>
+</div>
+</body>
+</html>

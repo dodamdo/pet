@@ -12,6 +12,7 @@ import java.time.LocalDate;
 public class PetInfoDto {
     private Long petId;
     private String petName;
+    private String petBreed;
     private Long ownerId;
     private LocalDate lastGroomingDate;
     private String lastGroomingStyle;

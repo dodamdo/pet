@@ -8,7 +8,7 @@ import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
-public interface OwnerRepository extends JpaRepository<OwnerEntity,Integer>{
+public interface OwnerRepository extends JpaRepository<OwnerEntity,Long>{
     @Query("SELECT o FROM OwnerEntity o WHERE CAST(o.ownerId AS string) LIKE %:ownerId%")
     List<OwnerEntity> findByOwnerId(@Param("ownerId") String ownerId);
 
