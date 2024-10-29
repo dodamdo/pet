@@ -9,6 +9,7 @@ import com.the.pet.repository.SchRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -39,8 +40,12 @@ public class PetService {
 
     public PetInfoDto getPetDetails(Long petId) {
         PetEntity pet = petRepository.findById(Math.toIntExact(petId)).orElseThrow(() -> new RuntimeException("Pet not found"));
-        List<SchEntity> lastGroomings = schRepository.findLastGroomingByPetId(pet.getPetId());  // 최근 미용 정보 가져오기
-        SchEntity lastGrooming = lastGroomings.isEmpty() ? null : lastGroomings.get(0); // 가장 최근 미용 정보
+        List<SchEntity> lastGroomings = schRepository.findLastGroomingByPetId(pet.getPetId());
+
+        SchEntity lastGrooming = lastGroomings.isEmpty() ? null : lastGroomings.get(0);
+        LocalDate groomingDate = lastGrooming != null ? lastGrooming.getSchDate() : null;
+        String groomingStyle = lastGrooming != null ? lastGrooming.getGroomingStyle() : "정보 없음";
+        String photoUrl = lastGrooming != null ? lastGrooming.getPhotoUrl() : null;
 
         int noShowCount = noShowRepository.countNoShow(petId);  // 노쇼 카운트
 
@@ -49,8 +54,9 @@ public class PetService {
                 pet.getPetName(),
                 pet.getPetBreed(),
                 pet.getOwnerId(),
-                lastGrooming.getSchDate(),
-                lastGrooming.getGroomingStyle(),
+                groomingDate,
+                groomingStyle,
+                photoUrl,
                 noShowCount
         );
     }
@@ -62,6 +68,9 @@ public class PetService {
         for (PetEntity pet : pets) {
             List<SchEntity> lastGroomings = schRepository.findLastGroomingByPetId(pet.getPetId());  // 최근 미용 정보 가져오기
             SchEntity lastGrooming = lastGroomings.isEmpty() ? null : lastGroomings.get(0); // 가장 최근 미용 정보
+            LocalDate groomingDate = lastGrooming != null ? lastGrooming.getSchDate() : null;
+            String groomingStyle = lastGrooming != null ? lastGrooming.getGroomingStyle() : "정보 없음";
+            String photoUrl = lastGrooming != null ? lastGrooming.getPhotoUrl() : null;
 
             int noShowCount = noShowRepository.countNoShow(pet.getPetId());  // 노쇼 카운트
 
@@ -70,8 +79,9 @@ public class PetService {
                     pet.getPetName(),
                     pet.getPetBreed(),
                     pet.getOwnerId(),
-                    lastGrooming != null ? lastGrooming.getSchDate() : null,  // 최근 미용 날짜
-                    lastGrooming != null ? lastGrooming.getGroomingStyle() : null,  // 미용 스타일
+                    groomingDate,
+                    groomingStyle,
+                    photoUrl,
                     noShowCount
             );
 

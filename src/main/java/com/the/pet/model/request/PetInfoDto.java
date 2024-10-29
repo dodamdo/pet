@@ -16,6 +16,7 @@ public class PetInfoDto {
     private Long ownerId;
     private LocalDate lastGroomingDate;
     private String lastGroomingStyle;
+    private String lastPhoto;
     private int noShowCount;
 
 }

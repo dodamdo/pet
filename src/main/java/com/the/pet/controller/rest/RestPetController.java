@@ -1,13 +1,19 @@
 package com.the.pet.controller.rest;
 
+import com.the.pet.model.entity.OwnerEntity;
 import com.the.pet.model.entity.PetEntity;
 import com.the.pet.model.request.PetInfoDto;
+import com.the.pet.model.request.PetOwnerDTO;
+import com.the.pet.repository.OwnerRepository;
 import com.the.pet.repository.PetRepository;
 import com.the.pet.service.PetService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
@@ -19,6 +25,8 @@ public class RestPetController
 
     @Autowired
     private  PetRepository petRepository;
+    @Autowired
+    private OwnerRepository ownerRepository;
 
 
     @GetMapping("/selectAll")
@@ -31,15 +39,19 @@ public class RestPetController
 
 
     @GetMapping("/api/flutterPetSearch")
-    public ResponseEntity<List<PetEntity>> getPetSearch(
+    public ResponseEntity<PetOwnerDTO> getPetSearch(
+            @RequestHeader(value = "Authorization", required = false) String authorization,
             @RequestParam(value = "search", required = false) String search) {
-
+        System.out.println("Authorization 헤더: " + authorization);
         List<PetEntity> pets;
+        List<OwnerEntity> owners;
         boolean isNumeric = search != null && search.matches("\\d+"); // 숫자열 확인
         if (isNumeric) {
-            pets = petRepository.findByOwnerIdLike(search); // 전화번호 검색
+            pets = petRepository.findByOwnerIdLike(search);
+            owners = ownerRepository.findByOwnerId(search);
         } else {
-            pets = petRepository.findByPetNameContainingIgnoreCase(search); // 펫 이름으로 검색
+            pets = petRepository.findByPetNameContainingIgnoreCase(search);
+            owners = ownerRepository.findByPetName(search);
         }
 
         for (PetEntity pet : pets) {
@@ -48,7 +60,34 @@ public class RestPetController
                 pet.setFormattedOwnerId(formattedOwnerId);
             }
         }
-        System.out.println(pets);
-        return ResponseEntity.status(HttpStatus.OK).body(pets);
+
+        PetOwnerDTO petOwnerDTO = new PetOwnerDTO(pets, owners);
+        return ResponseEntity.status(HttpStatus.OK).body(petOwnerDTO);
+
     }
+    @GetMapping("/api/petDetail")
+    public ResponseEntity<PetInfoDto> getPetDetail(
+            @RequestHeader(value = "Authorization", required = false) String authorization,
+            @RequestParam(value = "petId", required = false) Long petId) {
+        System.out.println("Authorization 헤더: " + authorization);
+        System.out.println("petId : " + petId);
+        PetInfoDto pet = petService.getPetDetails(petId);
+
+
+        System.out.println("petService : " + pet);
+        return ResponseEntity.ok(pet);
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
 }

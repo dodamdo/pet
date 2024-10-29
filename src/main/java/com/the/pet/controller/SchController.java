@@ -1,19 +1,16 @@
 package com.the.pet.controller;
 
-import com.the.pet.model.entity.PetEntity;
 import com.the.pet.model.entity.SchEntity;
 import com.the.pet.repository.PetRepository;
 import com.the.pet.repository.SchRepository;
 import com.the.pet.service.SchService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
-import java.time.YearMonth;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -90,7 +87,7 @@ public class SchController {
 
         model.addAttribute("card_total", schService.getTotalPriceForCardPayments("카드", year, month));
         model.addAttribute("cash_total", schService.getTotalPriceForCardPayments("현금", year, month));
-        model.addAttribute("account_total", schService.getTotalPriceForCardPayments("계좌이체", year, month));
+        model.addAttribute("account_total", schService.getTotalPriceForCardPayments("이체", year, month));
 
         return "schedule/schMonth";
     }
@@ -160,7 +157,7 @@ public class SchController {
         LocalDate endDate = LocalDate.parse(endDateStr);
         int cardTotal = schService.getTotalOutcomeForCardPayments("카드", startDate, endDate);
         int cashTotal = schService.getTotalOutcomeForCardPayments("현금", startDate, endDate);
-        int accountTotal = schService.getTotalOutcomeForCardPayments("계좌이체", startDate, endDate);
+        int accountTotal = schService.getTotalOutcomeForCardPayments("이체", startDate, endDate);
         Map<String, Integer> result = new HashMap<>();
         result.put("card_total", cardTotal);
         result.put("cash_total", cashTotal);

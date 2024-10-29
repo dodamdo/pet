@@ -31,7 +31,7 @@ public class SchEntity {
     @Column(name = "sch_time", length = 100)
     private String schTime;
 
-    @Column(name = "sch_color", length = 10)
+    @Column(name = "sch_color", length = 100)
     private String schColor = "black";
 
     @Column(name = "grooming_style", length = 100)

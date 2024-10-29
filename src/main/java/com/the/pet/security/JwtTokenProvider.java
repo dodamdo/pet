@@ -51,8 +51,7 @@ public class JwtTokenProvider {
     }
 
     // 토큰 유효성 검사
-    public boolean validateToken(String token, String username) {
-        final String extractedUsername = extractUsername(token);
-        return (extractedUsername.equals(username) && !isTokenExpired(token));
+    public boolean validateToken(String token) {
+        return !isTokenExpired(token);  // 만료 여부만 체크
     }
 }
