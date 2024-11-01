@@ -10,10 +10,7 @@ import com.the.pet.service.PetService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -78,11 +75,13 @@ public class RestPetController
         return ResponseEntity.ok(pet);
     }
 
-
-
-
-
-
+    @PostMapping("/api/petAdd")
+    public ResponseEntity<?> petAdd(
+            @RequestHeader(value="Authorization") String authoriztion,
+            @RequestBody PetEntity petEntity){
+        petRepository.save(petEntity);
+        return ResponseEntity.ok("등록 완료");
+    }
 
 
 
