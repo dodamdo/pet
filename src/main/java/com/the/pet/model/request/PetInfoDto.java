@@ -13,10 +13,12 @@ public class PetInfoDto {
     private Long petId;
     private String petName;
     private String petBreed;
+    private String petWeight;
     private Long ownerId;
     private LocalDate lastGroomingDate;
     private String lastGroomingStyle;
     private String lastPhoto;
     private int noShowCount;
+
 
 }

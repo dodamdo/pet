@@ -33,7 +33,7 @@ public class SecurityConfig {
                 .and()
                 .csrf().disable()
                 .authorizeHttpRequests(authz -> authz
-                        .requestMatchers("/login", "/priceList", "/flutterLogin", "/selectAll").permitAll()
+                        .requestMatchers("/login", "/priceList", "/flutterLogin", "/selectAll","/api/reservations/monthly","/api/reservations/daily","/catchphone").permitAll()
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(new JwtRequestFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class)

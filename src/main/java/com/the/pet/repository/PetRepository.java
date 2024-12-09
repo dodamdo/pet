@@ -29,4 +29,8 @@ public interface PetRepository extends JpaRepository<PetEntity,Integer>{
 
     @Query("SELECT p.ownerId FROM PetEntity p WHERE p.petId = :petId")
     String findOwnerIdById(@Param("petId") Long petId);
+
+
+    @Query("SELECT p FROM PetEntity p WHERE str(p.ownerId)")
+    List<PetEntity> findByOwnerId(@Param("ownerId") String ownerId);
 }

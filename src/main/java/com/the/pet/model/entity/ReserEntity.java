@@ -25,6 +25,7 @@ public class ReserEntity {
     private Long ownerId;
 
     private String petName;
+    private String petBreed;
 
     @Column(name = "reser_date", nullable = false)
     private LocalDate reserDate;

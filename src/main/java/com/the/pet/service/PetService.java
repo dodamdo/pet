@@ -28,6 +28,8 @@ public class PetService {
         return petRepository.findAll();
     }
 
+
+
     public void savePet(PetEntity pet) {
         petRepository.save(pet);
     }
@@ -35,7 +37,6 @@ public class PetService {
     public PetEntity getPetById(Long petId) {
         return petRepository.findById(Math.toIntExact(petId)).orElse(null);
     }
-
 
 
     public PetInfoDto getPetDetails(Long petId) {
@@ -53,6 +54,7 @@ public class PetService {
                 pet.getPetId(),
                 pet.getPetName(),
                 pet.getPetBreed(),
+                pet.getPetWeight(),
                 pet.getOwnerId(),
                 groomingDate,
                 groomingStyle,
@@ -60,6 +62,46 @@ public class PetService {
                 noShowCount
         );
     }
+
+
+    public List<PetInfoDto> catchphone(String ownerId) {
+        List<PetEntity> pets = petRepository.findByOwnerId(ownerId);  // 모든 펫 정보 가져오기
+        List<PetInfoDto> catchphone = new ArrayList<>();
+
+        for (PetEntity pet : pets) {
+            List<SchEntity> lastGroomings = schRepository.findLastGroomingByPetId(pet.getPetId());  // 최근 미용 정보 가져오기
+            SchEntity lastGrooming = lastGroomings.isEmpty() ? null : lastGroomings.get(0); // 가장 최근 미용 정보
+            LocalDate groomingDate = lastGrooming != null ? lastGrooming.getSchDate() : null;
+            String groomingStyle = lastGrooming != null ? lastGrooming.getGroomingStyle() : "정보 없음";
+            String photoUrl = lastGrooming != null ? lastGrooming.getPhotoUrl() : null;
+
+            int noShowCount = noShowRepository.countNoShow(pet.getPetId());  // 노쇼 카운트
+
+            PetInfoDto dto = new PetInfoDto(
+                    pet.getPetId(),
+                    pet.getPetName(),
+                    pet.getPetBreed(),
+                    pet.getPetWeight(),
+                    pet.getOwnerId(),
+                    groomingDate,
+                    groomingStyle,
+                    photoUrl,
+                    noShowCount
+            );
+
+            catchphone.add(dto);
+        }
+
+        catchphone.sort(Comparator.comparing(PetInfoDto::getPetId));
+
+        return catchphone;
+    }
+
+
+
+
+
+
 
     public List<PetInfoDto> getAllPetDetails() {
         List<PetEntity> pets = petRepository.findAll();  // 모든 펫 정보 가져오기
@@ -78,6 +120,7 @@ public class PetService {
                     pet.getPetId(),
                     pet.getPetName(),
                     pet.getPetBreed(),
+                    pet.getPetWeight(),
                     pet.getOwnerId(),
                     groomingDate,
                     groomingStyle,

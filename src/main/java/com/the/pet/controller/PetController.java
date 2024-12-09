@@ -20,8 +20,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -193,6 +191,12 @@ public class PetController {
     public String updatePet(@ModelAttribute("pet") PetEntity pet) {
         petRepository.save(pet);
         return "redirect:/pets/petDetail?petId="+pet.getPetId();
+    }
+
+    @PostMapping("/pets/petDelete")
+    public String deletePet(@ModelAttribute("pet") PetEntity pet) {
+        petRepository.deleteById(Math.toIntExact(pet.getPetId()));
+        return "redirect:/calendar";
     }
 
     @GetMapping("/pets/petinfo")

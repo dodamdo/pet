@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" th:href="@{/css/style.css}" />
-    <title>반려동물 수정하기</title>
+    <title>반려동물 수정 및 삭제</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -35,7 +35,7 @@
             border: 1px solid #ccc;
             border-radius: 4px;
         }
-        input[type="submit"] {
+        input[type="submit"], button {
             background-color: #007bff;
             color: white;
             border: none;
@@ -44,12 +44,18 @@
             cursor: pointer;
             transition: background-color 0.3s;
         }
-        input[type="submit"]:hover {
+        input[type="submit"]:hover, button:hover {
             background-color: #0056b3;
         }
-        .inline-label {
-            display: inline-block;
-            margin-right: 15px;
+        .delete-btn {
+            background-color: #dc3545;
+        }
+        .delete-btn:hover {
+            background-color: #a71d2a;
+        }
+        .button-container {
+            display: flex;
+            justify-content: space-between;
         }
     </style>
 </head>
@@ -58,7 +64,8 @@
 <div th:replace="common/header :: header"></div> <!-- 헤더 포함 -->
 
 <div class="main">
-    <h1>반려동물 수정하기</h1>
+    <h1>반려동물 수정 및 삭제</h1>
+    <!-- 수정 폼 -->
     <form th:action="@{/pets/petUpdate}" method="post" th:object="${pet}">
         <input type="hidden" name="petId" th:field="*{petId}" />
 
@@ -72,13 +79,13 @@
         <input type="text" id="petBreed" name="petBreed" th:field="*{petBreed}" />
 
         <label>성별:</label>
-        <label class="inline-label">
+        <label>
             <input type="radio" name="petGender" value="암컷" th:checked="*{petGender == '암컷'}" /> 암컷
         </label>
-        <label class="inline-label">
+        <label>
             <input type="radio" name="petGender" value="수컷" th:checked="*{petGender == '수컷'}" /> 수컷
         </label>
-        <label class="inline-label">
+        <label>
             <input type="radio" name="petGender" value="모름" th:checked="*{petGender == '모름'}" /> 모름
         </label>
 
@@ -92,17 +99,28 @@
         <input type="text" id="petNotes" name="petNotes" th:field="*{petNotes}" />
 
         <label>중성화 여부:</label>
-        <label class="inline-label">
+        <label>
             <input type="radio" name="isAltered" value="O" th:checked="*{isAltered == 'O'}" required /> O
         </label>
-        <label class="inline-label">
+        <label>
             <input type="radio" name="isAltered" value="X" th:checked="*{isAltered == 'X'}" /> X
         </label>
-        <label class="inline-label">
+        <label>
             <input type="radio" name="isAltered" value="모름" th:checked="*{isAltered == '모름'}" /> 모름
         </label>
         <br>
-        <input type="submit" value="수정하기" />
+
+        <div class="button-container">
+            <input type="submit" value="수정하기" />
+        </div>
+    </form>
+
+    <!-- 삭제 버튼 -->
+    <form th:action="@{/pets/petDelete}" method="post" th:object="${pet}">
+        <input type="hidden" name="petId" th:field="*{petId}" />
+        <div class="button-container">
+            <button type="submit" class="delete-btn">삭제하기</button>
+        </div>
     </form>
 </div>
 

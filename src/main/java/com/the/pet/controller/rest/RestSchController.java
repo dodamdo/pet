@@ -6,6 +6,7 @@ import com.the.pet.repository.PetRepository;
 import com.the.pet.repository.SchRepository;
 import com.the.pet.service.SchService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -90,6 +91,32 @@ public class RestSchController {
         return result;
     }
 
+    @PostMapping("/api/schmemoupdate")
+    public ResponseEntity<?> updateScheduleMemo(
+            @RequestBody Map<String, Object> requestBody) {
+        try {
+            Integer schId = (Integer) requestBody.get("schId");
+            String schNotes = (String) requestBody.get("schNotes");
+
+            SchEntity schedule = schRepository.findById(schId).orElseThrow(() ->
+                    new RuntimeException("스케줄을 찾을 수 없습니다: ID = " + schId)
+            );
+            schedule.setSchNotes(schNotes);
+            schRepository.save(schedule);
+
+            Map<String, Object> response = new HashMap<>();
+            response.put("message", "스케줄 메모가 성공적으로 업데이트되었습니다.");
+            response.put("updatedSchedule", schedule);
+
+            return ResponseEntity.ok(response);
+
+        } catch (Exception e) {
+
+            Map<String, String> errorResponse = new HashMap<>();
+            errorResponse.put("error", "스케줄 메모 업데이트 중 오류 발생: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
+        }
+    }
 
 
 
